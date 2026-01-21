@@ -7,7 +7,6 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import Welcome from "./pages/Welcome";
 import Onboarding from "./pages/Onboarding";
 import Index from "./pages/Index";
-import LocationSelection from "./pages/LocationSelection";
 import CropSoilSelection from "./pages/CropSoilSelection";
 import Advisory from "./pages/Advisory";
 import CropCalendar from "./pages/CropCalendar";
@@ -38,7 +37,6 @@ const App = () => (
             <Route path="/welcome" element={<Welcome />} />
             <Route path="/onboarding" element={<Onboarding />} />
             <Route path="/" element={<OnboardingGuard><Index /></OnboardingGuard>} />
-            <Route path="/location" element={<OnboardingGuard><LocationSelection /></OnboardingGuard>} />
             <Route path="/crop-selection" element={<OnboardingGuard><CropSoilSelection /></OnboardingGuard>} />
             <Route path="/advisory" element={<OnboardingGuard><Advisory /></OnboardingGuard>} />
             <Route path="/crop-calendar" element={<OnboardingGuard><CropCalendar /></OnboardingGuard>} />
