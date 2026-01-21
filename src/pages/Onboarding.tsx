@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { User, MapPin, Calendar, Info, Tractor } from "lucide-react";
+import { User, MapPin, Calendar, Info, Tractor, Navigation } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Farm, FarmerProfile } from "@/types/farm";
 import FarmCard from "@/components/FarmCard";
@@ -19,9 +19,11 @@ import AddFarmDialog from "@/components/AddFarmDialog";
 const Onboarding = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const [isGPSLoading, setIsGPSLoading] = useState(false);
   
   const [profile, setProfile] = useState<FarmerProfile>({
     name: "",
+    location: "",
     village: "",
     farms: [],
     farmingSeason: "",
@@ -73,7 +75,7 @@ const Onboarding = () => {
     navigate("/");
   };
 
-  const isFormValid = profile.village && profile.farms.length > 0 && profile.farmingSeason;
+  const isFormValid = profile.location && profile.farms.length > 0 && profile.farmingSeason;
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -104,11 +106,40 @@ const Onboarding = () => {
             />
           </div>
 
+          {/* Location Input */}
+          <div className="space-y-2">
+            <Label className="flex items-center gap-2 text-farmer-base">
+              <MapPin className="h-5 w-5 text-primary" />
+              {t("enterCityDistrict")} {t("required")}
+            </Label>
+            <Input
+              placeholder={t("cityPlaceholder")}
+              value={profile.location}
+              onChange={(e) => setProfile({ ...profile, location: e.target.value })}
+              className="h-14 text-farmer-lg"
+            />
+            <button
+              type="button"
+              onClick={() => {
+                setIsGPSLoading(true);
+                setTimeout(() => {
+                  setProfile({ ...profile, location: "Hyderabad, Telangana" });
+                  setIsGPSLoading(false);
+                }, 1500);
+              }}
+              disabled={isGPSLoading}
+              className="flex items-center gap-2 text-farmer-sm text-primary hover:underline"
+            >
+              <Navigation className={`h-4 w-4 ${isGPSLoading ? "animate-pulse" : ""}`} />
+              {isGPSLoading ? t("detectingLocation") : t("useGPSLocation")}
+            </button>
+          </div>
+
           {/* Village Input */}
           <div className="space-y-2">
             <Label className="flex items-center gap-2 text-farmer-base">
               <MapPin className="h-5 w-5 text-primary" />
-              {t("villageDistrict")} {t("required")}
+              {t("villageDistrict")} {t("optional")}
             </Label>
             <Input
               placeholder={t("enterVillageDistrict")}
