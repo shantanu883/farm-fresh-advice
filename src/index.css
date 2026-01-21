@@ -2,95 +2,110 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Smart Crop Advisory - Farmer-Friendly Design System */
+/* Earthy, nature-inspired palette with high contrast for outdoor visibility */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Core backgrounds - warm cream for outdoor readability */
+    --background: 45 30% 97%;
+    --foreground: 145 30% 15%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    /* Cards - soft white with subtle warmth */
+    --card: 45 40% 99%;
+    --card-foreground: 145 30% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 45 40% 99%;
+    --popover-foreground: 145 30% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Primary - Forest Green (agriculture, growth) */
+    --primary: 145 45% 32%;
+    --primary-foreground: 45 30% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Secondary - Sky Blue (weather, trust) */
+    --secondary: 200 70% 50%;
+    --secondary-foreground: 200 100% 98%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Muted - Soft sage */
+    --muted: 145 15% 90%;
+    --muted-foreground: 145 15% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Accent - Warm Amber (sun, harvest) */
+    --accent: 38 92% 50%;
+    --accent-foreground: 38 100% 15%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    /* Destructive - Alert Red */
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    /* Risk Colors */
+    --risk-low: 145 60% 42%;
+    --risk-medium: 38 92% 50%;
+    --risk-high: 0 72% 51%;
 
-    --radius: 0.5rem;
+    /* Weather Colors */
+    --weather-temp: 15 80% 55%;
+    --weather-humidity: 200 70% 50%;
+    --weather-rain: 210 90% 55%;
 
-    --sidebar-background: 0 0% 98%;
+    /* Borders & Inputs */
+    --border: 145 20% 85%;
+    --input: 145 20% 92%;
+    --ring: 145 45% 32%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
+    --radius: 1rem;
 
-    --sidebar-primary: 240 5.9% 10%;
+    /* Sidebar (not used but required) */
+    --sidebar-background: 45 30% 97%;
+    --sidebar-foreground: 145 30% 15%;
+    --sidebar-primary: 145 45% 32%;
+    --sidebar-primary-foreground: 45 30% 98%;
+    --sidebar-accent: 38 92% 50%;
+    --sidebar-accent-foreground: 38 100% 15%;
+    --sidebar-border: 145 20% 85%;
+    --sidebar-ring: 145 45% 32%;
 
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Custom Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(145 45% 32%), hsl(145 50% 25%));
+    --gradient-secondary: linear-gradient(135deg, hsl(200 70% 50%), hsl(200 80% 40%));
+    --gradient-accent: linear-gradient(135deg, hsl(38 92% 50%), hsl(28 90% 45%));
+    --gradient-hero: linear-gradient(180deg, hsl(145 40% 25%), hsl(145 45% 32%));
+    --gradient-sky: linear-gradient(180deg, hsl(200 80% 55%), hsl(200 70% 70%));
+    
+    /* Shadows */
+    --shadow-card: 0 4px 20px -4px hsl(145 30% 15% / 0.1);
+    --shadow-button: 0 4px 14px -4px hsl(145 45% 32% / 0.4);
+    --shadow-elevated: 0 8px 30px -8px hsl(145 30% 15% / 0.15);
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 145 25% 10%;
+    --foreground: 45 30% 95%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 145 20% 15%;
+    --card-foreground: 45 30% 95%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 145 20% 15%;
+    --popover-foreground: 45 30% 95%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 145 50% 45%;
+    --primary-foreground: 145 30% 10%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 200 60% 45%;
+    --secondary-foreground: 200 100% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 145 15% 25%;
+    --muted-foreground: 145 10% 65%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 38 85% 55%;
+    --accent-foreground: 38 100% 10%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 65% 45%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --border: 145 15% 25%;
+    --input: 145 15% 20%;
+    --ring: 145 50% 45%;
   }
 }
 
@@ -100,6 +115,80 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Large touch targets for farmers */
+  button, 
+  [role="button"],
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+}
+
+@layer components {
+  /* Hero text styles */
+  .text-hero {
+    @apply text-3xl font-bold tracking-tight;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Weather card gradient backgrounds */
+  .bg-weather-temp {
+    background: linear-gradient(135deg, hsl(var(--weather-temp)), hsl(15 75% 60%));
+  }
+
+  .bg-weather-humidity {
+    background: linear-gradient(135deg, hsl(var(--weather-humidity)), hsl(200 65% 55%));
+  }
+
+  .bg-weather-rain {
+    background: linear-gradient(135deg, hsl(var(--weather-rain)), hsl(210 85% 60%));
+  }
+
+  /* Risk badge styles */
+  .risk-low {
+    @apply bg-green-100 text-green-800 border-green-200;
+  }
+
+  .risk-medium {
+    @apply bg-amber-100 text-amber-800 border-amber-200;
+  }
+
+  .risk-high {
+    @apply bg-red-100 text-red-800 border-red-200;
+  }
+
+  /* Card elevation */
+  .card-elevated {
+    box-shadow: var(--shadow-card);
+  }
+
+  .card-elevated:hover {
+    box-shadow: var(--shadow-elevated);
+  }
+
+  /* Bottom nav safe area */
+  .safe-area-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  /* Page container with bottom nav spacing */
+  .page-container {
+    @apply min-h-screen pb-24 px-4 pt-6;
+  }
+}
+
+/* PWA splash screen support */
+@media (display-mode: standalone) {
+  body {
+    padding-top: env(safe-area-inset-top);
   }
 }

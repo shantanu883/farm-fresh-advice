@@ -7,7 +7,7 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "1rem",
       screens: {
         "2xl": "1400px",
       },
@@ -57,33 +57,77 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Risk indicator colors
+        risk: {
+          low: "hsl(var(--risk-low))",
+          medium: "hsl(var(--risk-medium))",
+          high: "hsl(var(--risk-high))",
+        },
+        // Weather display colors
+        weather: {
+          temp: "hsl(var(--weather-temp))",
+          humidity: "hsl(var(--weather-humidity))",
+          rain: "hsl(var(--weather-rain))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        md: "calc(var(--radius) - 4px)",
+        sm: "calc(var(--radius) - 8px)",
+        xl: "calc(var(--radius) + 4px)",
+        "2xl": "calc(var(--radius) + 8px)",
+      },
+      fontSize: {
+        // Larger text for outdoor readability
+        "farmer-sm": ["0.9375rem", { lineHeight: "1.5" }],
+        "farmer-base": ["1.0625rem", { lineHeight: "1.6" }],
+        "farmer-lg": ["1.25rem", { lineHeight: "1.5" }],
+        "farmer-xl": ["1.5rem", { lineHeight: "1.4" }],
+        "farmer-2xl": ["1.875rem", { lineHeight: "1.3" }],
+        "farmer-3xl": ["2.25rem", { lineHeight: "1.2" }],
+      },
+      spacing: {
+        "safe-bottom": "max(1rem, env(safe-area-inset-bottom))",
+        "nav-height": "4.5rem",
+      },
+      boxShadow: {
+        card: "var(--shadow-card)",
+        button: "var(--shadow-button)",
+        elevated: "var(--shadow-elevated)",
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "fade-in": {
+          from: { opacity: "0", transform: "translateY(10px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+        "slide-up": {
+          from: { opacity: "0", transform: "translateY(20px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+        pulse: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0.5" },
+        },
+        bounce: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-5px)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-in": "fade-in 0.4s ease-out",
+        "slide-up": "slide-up 0.5s ease-out",
+        pulse: "pulse 2s ease-in-out infinite",
+        bounce: "bounce 1s ease-in-out infinite",
       },
     },
   },
