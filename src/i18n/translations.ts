@@ -44,9 +44,20 @@ export const translations = {
     zaid: "Zaid (Summer)",
 
     // Farm Sizes
-    small: "Small",
-    medium: "Medium",
-    large: "Large",
+    small: "Small (< 2 acres)",
+    medium: "Medium (2-5 acres)",
+    large: "Large (> 5 acres)",
+
+    // Farm Management
+    addFarm: "Add Farm",
+    addNewFarm: "Add New Farm",
+    farmName: "Farm Name",
+    enterFarmName: "e.g., North Field, Main Plot...",
+    selectCrops: "Select Crops",
+    unnamedFarm: "Unnamed Farm",
+    myFarms: "My Farms",
+    noFarmsYet: "No farms added yet",
+    addFirstFarm: "Add your first farm to get started",
 
     // Home Screen
     getTodaysAdvice: "Get Today's Advice",
@@ -167,9 +178,20 @@ export const translations = {
     zaid: "जायद (गर्मी)",
 
     // Farm Sizes
-    small: "छोटा",
-    medium: "मध्यम",
-    large: "बड़ा",
+    small: "छोटा (< 2 एकड़)",
+    medium: "मध्यम (2-5 एकड़)",
+    large: "बड़ा (> 5 एकड़)",
+
+    // Farm Management
+    addFarm: "खेत जोड़ें",
+    addNewFarm: "नया खेत जोड़ें",
+    farmName: "खेत का नाम",
+    enterFarmName: "जैसे, उत्तरी खेत, मुख्य भूखंड...",
+    selectCrops: "फसलें चुनें",
+    unnamedFarm: "अनाम खेत",
+    myFarms: "मेरे खेत",
+    noFarmsYet: "अभी तक कोई खेत नहीं जोड़ा गया",
+    addFirstFarm: "शुरू करने के लिए अपना पहला खेत जोड़ें",
 
     // Home Screen
     getTodaysAdvice: "आज की सलाह प्राप्त करें",
@@ -290,9 +312,20 @@ export const translations = {
     zaid: "झैद (उन्हाळा)",
 
     // Farm Sizes
-    small: "लहान",
-    medium: "मध्यम",
-    large: "मोठे",
+    small: "लहान (< 2 एकर)",
+    medium: "मध्यम (2-5 एकर)",
+    large: "मोठे (> 5 एकर)",
+
+    // Farm Management
+    addFarm: "शेत जोडा",
+    addNewFarm: "नवीन शेत जोडा",
+    farmName: "शेताचे नाव",
+    enterFarmName: "उदा., उत्तर शेत, मुख्य भूखंड...",
+    selectCrops: "पिके निवडा",
+    unnamedFarm: "नाव नसलेले शेत",
+    myFarms: "माझी शेते",
+    noFarmsYet: "अद्याप कोणतेही शेत जोडलेले नाही",
+    addFirstFarm: "सुरू करण्यासाठी आपले पहिले शेत जोडा",
 
     // Home Screen
     getTodaysAdvice: "आजचा सल्ला मिळवा",
