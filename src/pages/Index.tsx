@@ -53,7 +53,7 @@ const Home = () => {
           <Button 
             variant="hero" 
             size="xl"
-            onClick={() => navigate("/location")}
+            onClick={() => navigate("/advisory")}
             className="w-full max-w-xs animate-fade-in"
           >
             {t("getTodaysAdvice")}
