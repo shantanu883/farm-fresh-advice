@@ -7,6 +7,7 @@ export interface Farm {
 
 export interface FarmerProfile {
   name: string;
+  location: string;
   village: string;
   farms: Farm[];
   farmingSeason: string;
