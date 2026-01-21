@@ -1,5 +1,7 @@
 import { cn } from "@/lib/utils";
 import { AlertTriangle, CheckCircle, AlertCircle } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { TranslationKey } from "@/i18n/translations";
 
 export type RiskLevel = "low" | "medium" | "high";
 
@@ -8,25 +10,26 @@ interface RiskBadgeProps {
   className?: string;
 }
 
-const riskConfig = {
+const riskConfig: Record<RiskLevel, { labelKey: TranslationKey; icon: typeof CheckCircle; className: string }> = {
   low: {
-    label: "Low Risk",
+    labelKey: "lowRisk",
     icon: CheckCircle,
     className: "risk-low",
   },
   medium: {
-    label: "Medium Risk",
+    labelKey: "mediumRisk",
     icon: AlertCircle,
     className: "risk-medium",
   },
   high: {
-    label: "High Risk",
+    labelKey: "highRisk",
     icon: AlertTriangle,
     className: "risk-high",
   },
 };
 
 const RiskBadge = ({ level, className }: RiskBadgeProps) => {
+  const { t } = useLanguage();
   const config = riskConfig[level];
   const Icon = config.icon;
 
@@ -39,7 +42,7 @@ const RiskBadge = ({ level, className }: RiskBadgeProps) => {
       )}
     >
       <Icon className="h-5 w-5" />
-      <span className="text-farmer-sm">{config.label}</span>
+      <span className="text-farmer-sm">{t(config.labelKey)}</span>
     </div>
   );
 };

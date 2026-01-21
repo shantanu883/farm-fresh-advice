@@ -5,9 +5,11 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import PageHeader from "@/components/PageHeader";
 import { MapPin, Navigation, ArrowRight } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const LocationSelection = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [location, setLocation] = useState("");
   const [isGPSLoading, setIsGPSLoading] = useState(false);
 
@@ -28,7 +30,7 @@ const LocationSelection = () => {
 
   return (
     <div className="page-container">
-      <PageHeader title="Select Location" showBack />
+      <PageHeader title={t("selectLocation")} showBack />
 
       <div className="mx-auto max-w-md space-y-6">
         {/* Location illustration */}
@@ -39,17 +41,17 @@ const LocationSelection = () => {
         </div>
 
         <p className="text-center text-farmer-base text-muted-foreground">
-          Enter your city or district to get location-specific weather and farming advice.
+          {t("locationNote")}
         </p>
 
         {/* Manual Input */}
         <Card className="card-elevated p-5">
           <label className="mb-3 block text-farmer-base font-semibold text-foreground">
-            Enter City / District
+            {t("enterCityDistrict")}
           </label>
           <Input
             type="text"
-            placeholder="e.g., Hyderabad, Nagpur..."
+            placeholder={t("cityPlaceholder")}
             value={location}
             onChange={(e) => setLocation(e.target.value)}
             className="h-14 text-farmer-base"
@@ -59,7 +61,7 @@ const LocationSelection = () => {
         {/* Divider */}
         <div className="flex items-center gap-4">
           <div className="h-px flex-1 bg-border" />
-          <span className="text-farmer-sm text-muted-foreground">OR</span>
+          <span className="text-farmer-sm text-muted-foreground">{t("or")}</span>
           <div className="h-px flex-1 bg-border" />
         </div>
 
@@ -72,7 +74,7 @@ const LocationSelection = () => {
           className="w-full"
         >
           <Navigation className={isGPSLoading ? "animate-pulse" : ""} />
-          {isGPSLoading ? "Detecting Location..." : "Use GPS Location"}
+          {isGPSLoading ? t("detectingLocation") : t("useGPSLocation")}
         </Button>
 
         {/* Continue Button */}
@@ -84,7 +86,7 @@ const LocationSelection = () => {
             disabled={!location.trim()}
             className="w-full"
           >
-            Continue
+            {t("continue")}
             <ArrowRight />
           </Button>
         </div>

@@ -1,9 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sprout, Sun, CloudSun } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Home = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -31,19 +33,19 @@ const Home = () => {
 
           {/* Title */}
           <h1 className="mb-4 text-farmer-3xl font-bold text-foreground">
-            Smart Crop Advisory
+            {t("appName")}
           </h1>
 
           {/* Tagline */}
           <p className="mb-10 max-w-xs text-farmer-lg text-muted-foreground">
-            Daily farming decisions based on weather
+            {t("tagline")}
           </p>
 
           {/* Weather decoration */}
           <div className="mb-10 flex items-center gap-2 rounded-full bg-muted px-6 py-3">
             <CloudSun className="h-6 w-6 text-secondary" />
             <span className="text-farmer-base font-medium text-foreground">
-              Weather-powered guidance
+              {t("weatherPoweredGuidance")}
             </span>
           </div>
 
@@ -54,7 +56,7 @@ const Home = () => {
             onClick={() => navigate("/location")}
             className="w-full max-w-xs animate-fade-in"
           >
-            Get Today's Advice
+            {t("getTodaysAdvice")}
           </Button>
         </div>
       </div>
@@ -62,7 +64,7 @@ const Home = () => {
       {/* Footer decoration */}
       <div className="flex h-20 items-center justify-center border-t border-border bg-muted/30">
         <p className="text-farmer-sm text-muted-foreground">
-          Made for farmers, by farmers 🌾
+          {t("madeForFarmers")}
         </p>
       </div>
     </div>

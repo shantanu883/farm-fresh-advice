@@ -1,6 +1,7 @@
 import { Thermometer, Droplets, CloudRain } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface WeatherData {
   temperature: number;
@@ -14,6 +15,8 @@ interface WeatherCardProps {
 }
 
 const WeatherCard = ({ weather, className }: WeatherCardProps) => {
+  const { t } = useLanguage();
+
   return (
     <Card className={cn("overflow-hidden p-0 card-elevated", className)}>
       <div className="grid grid-cols-3 divide-x divide-border">
@@ -25,7 +28,7 @@ const WeatherCard = ({ weather, className }: WeatherCardProps) => {
           <span className="text-farmer-xl font-bold text-foreground">
             {weather.temperature}°C
           </span>
-          <span className="text-farmer-sm text-muted-foreground">Temperature</span>
+          <span className="text-farmer-sm text-muted-foreground">{t("temperature")}</span>
         </div>
 
         {/* Humidity */}
@@ -36,7 +39,7 @@ const WeatherCard = ({ weather, className }: WeatherCardProps) => {
           <span className="text-farmer-xl font-bold text-foreground">
             {weather.humidity}%
           </span>
-          <span className="text-farmer-sm text-muted-foreground">Humidity</span>
+          <span className="text-farmer-sm text-muted-foreground">{t("humidity")}</span>
         </div>
 
         {/* Rainfall */}
@@ -47,7 +50,7 @@ const WeatherCard = ({ weather, className }: WeatherCardProps) => {
           <span className="text-farmer-xl font-bold text-foreground">
             {weather.rainfall}mm
           </span>
-          <span className="text-farmer-sm text-muted-foreground">Rainfall</span>
+          <span className="text-farmer-sm text-muted-foreground">{t("rainfall")}</span>
         </div>
       </div>
     </Card>

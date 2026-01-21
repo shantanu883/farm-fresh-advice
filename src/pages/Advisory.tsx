@@ -4,6 +4,7 @@ import AlertBanner from "@/components/AlertBanner";
 import BottomNavigation from "@/components/BottomNavigation";
 import { MapPin, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // Placeholder data
 const weatherData = {
@@ -12,16 +13,16 @@ const weatherData = {
   rainfall: 12,
 };
 
-const advisoryText = `Based on current weather conditions, it's a good day for irrigation. The temperature is optimal for crop growth. Consider applying fertilizer in the evening when temperatures are cooler. Monitor for pest activity due to high humidity.`;
-
 const Advisory = () => {
+  const { t } = useLanguage();
+
   return (
     <div className="page-container">
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-farmer-2xl font-bold text-foreground">
-            Today's Advisory
+            {t("todaysAdvisory")}
           </h1>
           <div className="mt-1 flex items-center gap-2 text-farmer-sm text-muted-foreground">
             <MapPin className="h-4 w-4" />
@@ -35,7 +36,7 @@ const Advisory = () => {
 
       {/* Alert Banner */}
       <AlertBanner
-        message="Heavy rainfall expected tomorrow. Plan your irrigation accordingly."
+        message={t("heavyRainfallWarning")}
         type="warning"
         className="mb-6"
       />
@@ -43,7 +44,7 @@ const Advisory = () => {
       {/* Weather Card */}
       <div className="mb-6">
         <h2 className="mb-3 text-farmer-lg font-semibold text-foreground">
-          Current Weather
+          {t("currentWeather")}
         </h2>
         <WeatherCard weather={weatherData} />
       </div>
@@ -51,7 +52,7 @@ const Advisory = () => {
       {/* Advisory Card */}
       <div className="mb-6">
         <AdvisoryCard 
-          advice={advisoryText} 
+          advice={t("advisoryPlaceholder")} 
           riskLevel="medium" 
         />
       </div>
@@ -59,17 +60,17 @@ const Advisory = () => {
       {/* Quick Tips */}
       <div className="mb-6">
         <h2 className="mb-3 text-farmer-lg font-semibold text-foreground">
-          Quick Tips
+          {t("quickTips")}
         </h2>
         <div className="grid grid-cols-2 gap-3">
           <div className="rounded-xl bg-primary/10 p-4">
             <p className="text-farmer-sm font-medium text-primary">
-              💧 Best irrigation time: 6-8 AM
+              {t("bestIrrigationTime")}
             </p>
           </div>
           <div className="rounded-xl bg-accent/10 p-4">
             <p className="text-farmer-sm font-medium text-accent">
-              🌱 Fertilizer: Evening preferred
+              {t("fertilizerTip")}
             </p>
           </div>
         </div>

@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import RiskBadge, { type RiskLevel } from "./RiskBadge";
 import { Lightbulb } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface AdvisoryCardProps {
   advice: string;
@@ -10,6 +11,8 @@ interface AdvisoryCardProps {
 }
 
 const AdvisoryCard = ({ advice, riskLevel, className }: AdvisoryCardProps) => {
+  const { t } = useLanguage();
+
   return (
     <Card className={cn("card-elevated overflow-hidden", className)}>
       <div className="bg-primary p-4">
@@ -18,7 +21,7 @@ const AdvisoryCard = ({ advice, riskLevel, className }: AdvisoryCardProps) => {
             <Lightbulb className="h-5 w-5 text-primary-foreground" />
           </div>
           <h3 className="text-farmer-lg font-bold text-primary-foreground">
-            What should I do today?
+            {t("whatShouldIDoToday")}
           </h3>
         </div>
       </div>
