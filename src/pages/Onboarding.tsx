@@ -10,17 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { User, MapPin, Wheat, Mountain, Calendar, Ruler, Info } from "lucide-react";
+import { User, MapPin, Calendar, Info, Tractor } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-
-interface FarmerProfile {
-  name: string;
-  village: string;
-  primaryCrop: string;
-  soilType: string;
-  farmingSeason: string;
-  farmSize: string;
-}
+import { Farm, FarmerProfile } from "@/types/farm";
+import FarmCard from "@/components/FarmCard";
+import AddFarmDialog from "@/components/AddFarmDialog";
 
 const Onboarding = () => {
   const navigate = useNavigate();
@@ -29,10 +23,8 @@ const Onboarding = () => {
   const [profile, setProfile] = useState<FarmerProfile>({
     name: "",
     village: "",
-    primaryCrop: "",
-    soilType: "",
+    farms: [],
     farmingSeason: "",
-    farmSize: "",
   });
 
   const crops = [
@@ -42,18 +34,10 @@ const Onboarding = () => {
     { value: "tomato", label: t("tomato") },
   ];
 
-  const soilTypes = [
-    { value: "black", label: t("blackSoil") },
-    { value: "red", label: t("redSoil") },
-    { value: "sandy", label: t("sandySoil") },
-    { value: "alluvial", label: t("alluvialSoil") },
-  ];
-
-  const seasons = [
-    { value: "kharif", label: t("kharif") },
-    { value: "rabi", label: t("rabi") },
-    { value: "zaid", label: t("zaid") },
-  ];
+  const cropLabels = crops.reduce((acc, crop) => {
+    acc[crop.value] = crop.label;
+    return acc;
+  }, {} as Record<string, string>);
 
   const farmSizes = [
     { value: "small", label: t("small") },
@@ -61,13 +45,35 @@ const Onboarding = () => {
     { value: "large", label: t("large") },
   ];
 
+  const sizeLabels = farmSizes.reduce((acc, size) => {
+    acc[size.value] = size.label;
+    return acc;
+  }, {} as Record<string, string>);
+
+  const seasons = [
+    { value: "kharif", label: t("kharif") },
+    { value: "rabi", label: t("rabi") },
+    { value: "zaid", label: t("zaid") },
+  ];
+
+  const handleAddFarm = (farm: Farm) => {
+    setProfile({ ...profile, farms: [...profile.farms, farm] });
+  };
+
+  const handleDeleteFarm = (farmId: string) => {
+    setProfile({
+      ...profile,
+      farms: profile.farms.filter((f) => f.id !== farmId),
+    });
+  };
+
   const handleSave = () => {
     localStorage.setItem("farmerProfile", JSON.stringify(profile));
     localStorage.setItem("onboardingComplete", "true");
     navigate("/");
   };
 
-  const isFormValid = profile.village && profile.primaryCrop && profile.soilType && profile.farmingSeason;
+  const isFormValid = profile.village && profile.farms.length > 0 && profile.farmingSeason;
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
@@ -112,52 +118,6 @@ const Onboarding = () => {
             />
           </div>
 
-          {/* Primary Crop */}
-          <div className="space-y-2">
-            <Label className="flex items-center gap-2 text-farmer-base">
-              <Wheat className="h-5 w-5 text-primary" />
-              {t("primaryCrop")} {t("required")}
-            </Label>
-            <Select
-              value={profile.primaryCrop}
-              onValueChange={(value) => setProfile({ ...profile, primaryCrop: value })}
-            >
-              <SelectTrigger className="h-14 text-farmer-lg">
-                <SelectValue placeholder={t("selectMainCrop")} />
-              </SelectTrigger>
-              <SelectContent>
-                {crops.map((crop) => (
-                  <SelectItem key={crop.value} value={crop.value} className="text-farmer-lg py-3">
-                    {crop.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Soil Type */}
-          <div className="space-y-2">
-            <Label className="flex items-center gap-2 text-farmer-base">
-              <Mountain className="h-5 w-5 text-primary" />
-              {t("soilType")} {t("required")}
-            </Label>
-            <Select
-              value={profile.soilType}
-              onValueChange={(value) => setProfile({ ...profile, soilType: value })}
-            >
-              <SelectTrigger className="h-14 text-farmer-lg">
-                <SelectValue placeholder={t("selectSoilType")} />
-              </SelectTrigger>
-              <SelectContent>
-                {soilTypes.map((soil) => (
-                  <SelectItem key={soil.value} value={soil.value} className="text-farmer-lg py-3">
-                    {soil.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
           {/* Farming Season */}
           <div className="space-y-2">
             <Label className="flex items-center gap-2 text-farmer-base">
@@ -171,7 +131,7 @@ const Onboarding = () => {
               <SelectTrigger className="h-14 text-farmer-lg">
                 <SelectValue placeholder={t("selectSeason")} />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-card">
                 {seasons.map((season) => (
                   <SelectItem key={season.value} value={season.value} className="text-farmer-lg py-3">
                     {season.label}
@@ -181,27 +141,42 @@ const Onboarding = () => {
             </Select>
           </div>
 
-          {/* Farm Size */}
-          <div className="space-y-2">
+          {/* Farms Section */}
+          <div className="space-y-4 pt-2">
             <Label className="flex items-center gap-2 text-farmer-base">
-              <Ruler className="h-5 w-5 text-primary" />
-              {t("farmSize")} {t("optional")}
+              <Tractor className="h-5 w-5 text-primary" />
+              {t("myFarms")} {t("required")}
             </Label>
-            <Select
-              value={profile.farmSize}
-              onValueChange={(value) => setProfile({ ...profile, farmSize: value })}
-            >
-              <SelectTrigger className="h-14 text-farmer-lg">
-                <SelectValue placeholder={t("selectFarmSize")} />
-              </SelectTrigger>
-              <SelectContent>
-                {farmSizes.map((size) => (
-                  <SelectItem key={size.value} value={size.value} className="text-farmer-lg py-3">
-                    {size.label}
-                  </SelectItem>
+
+            {profile.farms.length === 0 ? (
+              <div className="rounded-2xl border-2 border-dashed border-border bg-muted/30 p-6 text-center">
+                <Tractor className="mx-auto h-10 w-10 text-muted-foreground/50" />
+                <p className="mt-2 text-farmer-base text-muted-foreground">
+                  {t("noFarmsYet")}
+                </p>
+                <p className="text-farmer-sm text-muted-foreground/70">
+                  {t("addFirstFarm")}
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {profile.farms.map((farm) => (
+                  <FarmCard
+                    key={farm.id}
+                    farm={farm}
+                    onDelete={handleDeleteFarm}
+                    cropLabels={cropLabels}
+                    sizeLabels={sizeLabels}
+                  />
                 ))}
-              </SelectContent>
-            </Select>
+              </div>
+            )}
+
+            <AddFarmDialog
+              onAdd={handleAddFarm}
+              crops={crops}
+              farmSizes={farmSizes}
+            />
           </div>
 
           {/* Info Note */}
