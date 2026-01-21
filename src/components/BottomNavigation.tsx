@@ -1,22 +1,25 @@
 import { Link, useLocation } from "react-router-dom";
 import { Home, Leaf, Calendar, Settings } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { TranslationKey } from "@/i18n/translations";
 
 interface NavItem {
   path: string;
-  label: string;
+  labelKey: TranslationKey;
   icon: React.ComponentType<{ className?: string }>;
 }
 
 const navItems: NavItem[] = [
-  { path: "/", label: "Home", icon: Home },
-  { path: "/advisory", label: "Advisory", icon: Leaf },
-  { path: "/crop-calendar", label: "Calendar", icon: Calendar },
-  { path: "/settings", label: "Settings", icon: Settings },
+  { path: "/", labelKey: "home", icon: Home },
+  { path: "/advisory", labelKey: "advisory", icon: Leaf },
+  { path: "/crop-calendar", labelKey: "calendar", icon: Calendar },
+  { path: "/settings", labelKey: "settings", icon: Settings },
 ];
 
 const BottomNavigation = () => {
   const location = useLocation();
+  const { t } = useLanguage();
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-card/95 backdrop-blur-lg safe-area-bottom">
@@ -48,7 +51,7 @@ const BottomNavigation = () => {
                 "text-xs font-medium",
                 isActive && "font-semibold"
               )}>
-                {item.label}
+                {t(item.labelKey)}
               </span>
             </Link>
           );

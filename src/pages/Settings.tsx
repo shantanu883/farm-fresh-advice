@@ -8,8 +8,12 @@ import {
 } from "@/components/ui/select";
 import BottomNavigation from "@/components/BottomNavigation";
 import { Settings as SettingsIcon, Globe, WifiOff, Info, Sprout } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { Language } from "@/i18n/translations";
 
 const Settings = () => {
+  const { language, setLanguage, t } = useLanguage();
+
   return (
     <div className="page-container">
       {/* Header */}
@@ -18,7 +22,7 @@ const Settings = () => {
           <SettingsIcon className="h-6 w-6 text-primary" />
         </div>
         <h1 className="text-farmer-2xl font-bold text-foreground">
-          Settings
+          {t("settings")}
         </h1>
       </div>
 
@@ -28,19 +32,22 @@ const Settings = () => {
           <div className="mb-4 flex items-center gap-3">
             <Globe className="h-6 w-6 text-secondary" />
             <h2 className="text-farmer-lg font-semibold text-foreground">
-              Language
+              {t("language")}
             </h2>
           </div>
-          <Select defaultValue="english">
+          <Select value={language} onValueChange={(value) => setLanguage(value as Language)}>
             <SelectTrigger className="h-14 text-farmer-base">
-              <SelectValue placeholder="Select Language" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="english" className="text-farmer-base py-3">
+              <SelectItem value="en" className="text-farmer-base py-3">
                 English
               </SelectItem>
-              <SelectItem value="hindi" className="text-farmer-base py-3">
+              <SelectItem value="hi" className="text-farmer-base py-3">
                 हिंदी (Hindi)
+              </SelectItem>
+              <SelectItem value="mr" className="text-farmer-base py-3">
+                मराठी (Marathi)
               </SelectItem>
             </SelectContent>
           </Select>
@@ -51,16 +58,15 @@ const Settings = () => {
           <div className="mb-3 flex items-center gap-3">
             <WifiOff className="h-6 w-6 text-accent" />
             <h2 className="text-farmer-lg font-semibold text-foreground">
-              Offline Mode
+              {t("offlineMode")}
             </h2>
           </div>
           <p className="text-farmer-base text-muted-foreground">
-            This app can work offline. Your last viewed advisory and crop calendar 
-            will be available even without an internet connection.
+            {t("offlineModeInfo")}
           </p>
           <div className="mt-4 rounded-lg bg-muted p-3">
             <p className="text-farmer-sm text-muted-foreground">
-              ✓ Last synced: Today, 8:30 AM
+              {t("lastSynced")}
             </p>
           </div>
         </Card>
@@ -70,7 +76,7 @@ const Settings = () => {
           <div className="mb-3 flex items-center gap-3">
             <Info className="h-6 w-6 text-primary" />
             <h2 className="text-farmer-lg font-semibold text-foreground">
-              About
+              {t("about")}
             </h2>
           </div>
           <div className="space-y-3 text-farmer-base text-muted-foreground">
@@ -79,17 +85,15 @@ const Settings = () => {
                 <Sprout className="h-6 w-6 text-primary-foreground" />
               </div>
               <div>
-                <p className="font-semibold text-foreground">Smart Crop Advisory</p>
-                <p className="text-farmer-sm">Version 1.0.0</p>
+                <p className="font-semibold text-foreground">{t("appName")}</p>
+                <p className="text-farmer-sm">{t("version")}</p>
               </div>
             </div>
             <p>
-              A weather-integrated farming advisory system designed to help 
-              farmers make informed decisions about their daily agricultural 
-              activities.
+              {t("aboutDescription")}
             </p>
             <p className="text-farmer-sm">
-              Developed with ❤️ for the farming community.
+              {t("developedWith")}
             </p>
           </div>
         </Card>

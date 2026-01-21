@@ -11,11 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { User, MapPin, Wheat, Mountain, Calendar, Ruler, Info } from "lucide-react";
-
-const crops = ["Rice", "Wheat", "Cotton", "Tomato"];
-const soilTypes = ["Black", "Red", "Sandy", "Alluvial"];
-const seasons = ["Kharif", "Rabi", "Zaid"];
-const farmSizes = ["Small", "Medium", "Large"];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface FarmerProfile {
   name: string;
@@ -28,6 +24,8 @@ interface FarmerProfile {
 
 const Onboarding = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
+  
   const [profile, setProfile] = useState<FarmerProfile>({
     name: "",
     village: "",
@@ -37,8 +35,33 @@ const Onboarding = () => {
     farmSize: "",
   });
 
+  const crops = [
+    { value: "rice", label: t("rice") },
+    { value: "wheat", label: t("wheat") },
+    { value: "cotton", label: t("cotton") },
+    { value: "tomato", label: t("tomato") },
+  ];
+
+  const soilTypes = [
+    { value: "black", label: t("blackSoil") },
+    { value: "red", label: t("redSoil") },
+    { value: "sandy", label: t("sandySoil") },
+    { value: "alluvial", label: t("alluvialSoil") },
+  ];
+
+  const seasons = [
+    { value: "kharif", label: t("kharif") },
+    { value: "rabi", label: t("rabi") },
+    { value: "zaid", label: t("zaid") },
+  ];
+
+  const farmSizes = [
+    { value: "small", label: t("small") },
+    { value: "medium", label: t("medium") },
+    { value: "large", label: t("large") },
+  ];
+
   const handleSave = () => {
-    // Store farmer profile locally
     localStorage.setItem("farmerProfile", JSON.stringify(profile));
     localStorage.setItem("onboardingComplete", "true");
     navigate("/");
@@ -51,10 +74,10 @@ const Onboarding = () => {
       {/* Header */}
       <div className="border-b border-border bg-card px-6 py-6">
         <h1 className="text-farmer-2xl font-bold text-foreground">
-          Welcome, Farmer! 👨‍🌾
+          {t("welcomeFarmer")}
         </h1>
         <p className="mt-1 text-farmer-base text-muted-foreground">
-          Tell us about your farm
+          {t("tellUsAboutFarm")}
         </p>
       </div>
 
@@ -65,10 +88,10 @@ const Onboarding = () => {
           <div className="space-y-2">
             <Label className="flex items-center gap-2 text-farmer-base">
               <User className="h-5 w-5 text-primary" />
-              Your Name (Optional)
+              {t("yourName")} {t("optional")}
             </Label>
             <Input
-              placeholder="Enter your name"
+              placeholder={t("enterYourName")}
               value={profile.name}
               onChange={(e) => setProfile({ ...profile, name: e.target.value })}
               className="h-14 text-farmer-lg"
@@ -79,10 +102,10 @@ const Onboarding = () => {
           <div className="space-y-2">
             <Label className="flex items-center gap-2 text-farmer-base">
               <MapPin className="h-5 w-5 text-primary" />
-              Village / District *
+              {t("villageDistrict")} {t("required")}
             </Label>
             <Input
-              placeholder="Enter your village or district"
+              placeholder={t("enterVillageDistrict")}
               value={profile.village}
               onChange={(e) => setProfile({ ...profile, village: e.target.value })}
               className="h-14 text-farmer-lg"
@@ -93,19 +116,19 @@ const Onboarding = () => {
           <div className="space-y-2">
             <Label className="flex items-center gap-2 text-farmer-base">
               <Wheat className="h-5 w-5 text-primary" />
-              Primary Crop *
+              {t("primaryCrop")} {t("required")}
             </Label>
             <Select
               value={profile.primaryCrop}
               onValueChange={(value) => setProfile({ ...profile, primaryCrop: value })}
             >
               <SelectTrigger className="h-14 text-farmer-lg">
-                <SelectValue placeholder="Select your main crop" />
+                <SelectValue placeholder={t("selectMainCrop")} />
               </SelectTrigger>
               <SelectContent>
                 {crops.map((crop) => (
-                  <SelectItem key={crop} value={crop} className="text-farmer-lg py-3">
-                    {crop}
+                  <SelectItem key={crop.value} value={crop.value} className="text-farmer-lg py-3">
+                    {crop.label}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -116,19 +139,19 @@ const Onboarding = () => {
           <div className="space-y-2">
             <Label className="flex items-center gap-2 text-farmer-base">
               <Mountain className="h-5 w-5 text-primary" />
-              Soil Type *
+              {t("soilType")} {t("required")}
             </Label>
             <Select
               value={profile.soilType}
               onValueChange={(value) => setProfile({ ...profile, soilType: value })}
             >
               <SelectTrigger className="h-14 text-farmer-lg">
-                <SelectValue placeholder="Select soil type" />
+                <SelectValue placeholder={t("selectSoilType")} />
               </SelectTrigger>
               <SelectContent>
                 {soilTypes.map((soil) => (
-                  <SelectItem key={soil} value={soil} className="text-farmer-lg py-3">
-                    {soil}
+                  <SelectItem key={soil.value} value={soil.value} className="text-farmer-lg py-3">
+                    {soil.label}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -139,19 +162,19 @@ const Onboarding = () => {
           <div className="space-y-2">
             <Label className="flex items-center gap-2 text-farmer-base">
               <Calendar className="h-5 w-5 text-primary" />
-              Farming Season *
+              {t("farmingSeason")} {t("required")}
             </Label>
             <Select
               value={profile.farmingSeason}
               onValueChange={(value) => setProfile({ ...profile, farmingSeason: value })}
             >
               <SelectTrigger className="h-14 text-farmer-lg">
-                <SelectValue placeholder="Select season" />
+                <SelectValue placeholder={t("selectSeason")} />
               </SelectTrigger>
               <SelectContent>
                 {seasons.map((season) => (
-                  <SelectItem key={season} value={season} className="text-farmer-lg py-3">
-                    {season}
+                  <SelectItem key={season.value} value={season.value} className="text-farmer-lg py-3">
+                    {season.label}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -162,19 +185,19 @@ const Onboarding = () => {
           <div className="space-y-2">
             <Label className="flex items-center gap-2 text-farmer-base">
               <Ruler className="h-5 w-5 text-primary" />
-              Farm Size (Optional)
+              {t("farmSize")} {t("optional")}
             </Label>
             <Select
               value={profile.farmSize}
               onValueChange={(value) => setProfile({ ...profile, farmSize: value })}
             >
               <SelectTrigger className="h-14 text-farmer-lg">
-                <SelectValue placeholder="Select farm size" />
+                <SelectValue placeholder={t("selectFarmSize")} />
               </SelectTrigger>
               <SelectContent>
                 {farmSizes.map((size) => (
-                  <SelectItem key={size} value={size} className="text-farmer-lg py-3">
-                    {size}
+                  <SelectItem key={size.value} value={size.value} className="text-farmer-lg py-3">
+                    {size.label}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -185,7 +208,7 @@ const Onboarding = () => {
           <div className="flex items-start gap-3 rounded-xl bg-muted/50 p-4">
             <Info className="mt-0.5 h-5 w-5 flex-shrink-0 text-primary" />
             <p className="text-farmer-sm text-muted-foreground">
-              This information helps provide accurate farming advice tailored to your needs. Your data stays on your device.
+              {t("profileNote")}
             </p>
           </div>
         </div>
@@ -200,7 +223,7 @@ const Onboarding = () => {
           disabled={!isFormValid}
           className="w-full"
         >
-          Save & Continue
+          {t("saveAndContinue")}
         </Button>
       </div>
     </div>

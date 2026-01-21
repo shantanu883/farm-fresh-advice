@@ -1,8 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sprout, Globe } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { Language } from "@/i18n/translations";
 
-const languages = [
+const languages: { code: Language; label: string; native: string }[] = [
   { code: "en", label: "English", native: "English" },
   { code: "hi", label: "Hindi", native: "हिंदी" },
   { code: "mr", label: "Marathi", native: "मराठी" },
@@ -10,9 +12,10 @@ const languages = [
 
 const Welcome = () => {
   const navigate = useNavigate();
+  const { setLanguage, t } = useLanguage();
 
-  const handleLanguageSelect = (langCode: string) => {
-    localStorage.setItem("selectedLanguage", langCode);
+  const handleLanguageSelect = (langCode: Language) => {
+    setLanguage(langCode);
     navigate("/onboarding");
   };
 
@@ -35,18 +38,18 @@ const Welcome = () => {
 
           {/* Title */}
           <h1 className="mb-3 text-farmer-3xl font-bold text-foreground">
-            Smart Crop Advisory
+            {t("appName")}
           </h1>
 
           {/* Tagline */}
           <p className="mb-10 max-w-xs text-farmer-lg text-muted-foreground">
-            Daily farming decisions using weather
+            {t("tagline")}
           </p>
 
           {/* Language Selection */}
           <div className="mb-6 flex items-center gap-2 text-muted-foreground">
             <Globe className="h-5 w-5" />
-            <span className="text-farmer-base font-medium">Select Language</span>
+            <span className="text-farmer-base font-medium">{t("selectLanguage")}</span>
           </div>
 
           {/* Language Buttons */}
@@ -72,7 +75,7 @@ const Welcome = () => {
       {/* Footer */}
       <div className="flex h-16 items-center justify-center border-t border-border bg-muted/30">
         <p className="text-farmer-sm text-muted-foreground">
-          Made for farmers 🌾
+          {t("madeForFarmers")}
         </p>
       </div>
     </div>
