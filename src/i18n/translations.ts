@@ -39,9 +39,9 @@ export const translations = {
     alluvialSoil: "Alluvial Soil",
 
     // Seasons
-    kharif: "Kharif",
-    rabi: "Rabi",
-    zaid: "Zaid",
+    kharif: "Kharif (Monsoon)",
+    rabi: "Rabi (Winter)",
+    zaid: "Zaid (Summer)",
 
     // Farm Sizes
     small: "Small",
@@ -162,9 +162,9 @@ export const translations = {
     alluvialSoil: "जलोढ़ मिट्टी",
 
     // Seasons
-    kharif: "खरीफ",
-    rabi: "रबी",
-    zaid: "जायद",
+    kharif: "खरीफ (मानसून)",
+    rabi: "रबी (सर्दी)",
+    zaid: "जायद (गर्मी)",
 
     // Farm Sizes
     small: "छोटा",
@@ -285,9 +285,9 @@ export const translations = {
     alluvialSoil: "गाळाची माती",
 
     // Seasons
-    kharif: "खरीप",
-    rabi: "रब्बी",
-    zaid: "झैद",
+    kharif: "खरीप (मान्सून)",
+    rabi: "रब्बी (हिवाळा)",
+    zaid: "झैद (उन्हाळा)",
 
     // Farm Sizes
     small: "लहान",
