@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import WeatherCard from "@/components/WeatherCard";
 import AdvisoryCard from "@/components/AdvisoryCard";
+import ForecastCard from "@/components/ForecastCard";
+import ThreeDayPlanCard from "@/components/ThreeDayPlanCard";
 import AlertBanner from "@/components/AlertBanner";
 import BottomNavigation from "@/components/BottomNavigation";
 import { MapPin, RefreshCw, Navigation, Loader2 } from "lucide-react";
@@ -15,6 +17,7 @@ const Advisory = () => {
   const { t } = useLanguage();
   const { 
     weather, 
+    forecast,
     locationName, 
     isLoading: isWeatherLoading, 
     error: weatherError, 
@@ -51,7 +54,7 @@ const Advisory = () => {
     }
   }, []);
 
-  // Generate advisory when weather data is available
+  // Generate advisory when weather and forecast data are available
   useEffect(() => {
     if (weather && !advisory && !isAdvisoryLoading) {
       const farmData = farmerProfile ? {
@@ -59,9 +62,9 @@ const Advisory = () => {
         season: farmerProfile.farmingSeason
       } : undefined;
 
-      generateAdvisory(weather, farmData);
+      generateAdvisory(weather, farmData, forecast);
     }
-  }, [weather, farmerProfile]);
+  }, [weather, forecast, farmerProfile]);
 
   const handleRefresh = async () => {
     await refreshWeather();
@@ -70,7 +73,7 @@ const Advisory = () => {
         crops: farmerProfile.farms.flatMap(f => f.crops),
         season: farmerProfile.farmingSeason
       } : undefined;
-      generateAdvisory(weather, farmData);
+      generateAdvisory(weather, farmData, forecast);
     }
   };
 
@@ -160,6 +163,13 @@ const Advisory = () => {
         )}
       </div>
 
+      {/* 5-Day Forecast */}
+      {forecast.length > 0 && (
+        <div className="mb-6">
+          <ForecastCard forecast={forecast} />
+        </div>
+      )}
+
       {/* Advisory Card */}
       <div className="mb-6">
         <AdvisoryCard 
@@ -171,6 +181,13 @@ const Advisory = () => {
           isLoading={isAdvisoryLoading}
         />
       </div>
+
+      {/* 3-Day Plan */}
+      {advisory?.threeDayPlan && advisory.threeDayPlan.length > 0 && (
+        <div className="mb-6">
+          <ThreeDayPlanCard plan={advisory.threeDayPlan} />
+        </div>
+      )}
 
       <BottomNavigation />
     </div>

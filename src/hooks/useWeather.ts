@@ -8,7 +8,19 @@ export interface WeatherData {
   description?: string;
   icon?: string;
   windSpeed?: number;
-  location?: string;
+}
+
+export interface ForecastDay {
+  date: string;
+  dayName: string;
+  temperature: number;
+  tempMin: number;
+  tempMax: number;
+  humidity: number;
+  rainfall: number;
+  description: string;
+  icon: string;
+  windSpeed: number;
 }
 
 export interface GeoLocation {
@@ -18,6 +30,7 @@ export interface GeoLocation {
 
 interface UseWeatherReturn {
   weather: WeatherData | null;
+  forecast: ForecastDay[];
   location: GeoLocation | null;
   locationName: string;
   isLoading: boolean;
@@ -28,6 +41,7 @@ interface UseWeatherReturn {
 
 export const useWeather = (): UseWeatherReturn => {
   const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [forecast, setForecast] = useState<ForecastDay[]>([]);
   const [location, setLocation] = useState<GeoLocation | null>(null);
   const [locationName, setLocationName] = useState<string>('');
   const [isLoading, setIsLoading] = useState(false);
@@ -50,14 +64,29 @@ export const useWeather = (): UseWeatherReturn => {
         throw new Error(data.error);
       }
 
-      setWeather({
-        temperature: data.temperature,
-        humidity: data.humidity,
-        rainfall: data.rainfall,
-        description: data.description,
-        icon: data.icon,
-        windSpeed: data.windSpeed,
-      });
+      // Handle new response structure with current and forecast
+      if (data.current) {
+        setWeather({
+          temperature: data.current.temperature,
+          humidity: data.current.humidity,
+          rainfall: data.current.rainfall,
+          description: data.current.description,
+          icon: data.current.icon,
+          windSpeed: data.current.windSpeed,
+        });
+        setForecast(data.forecast || []);
+      } else {
+        // Fallback for old response structure
+        setWeather({
+          temperature: data.temperature,
+          humidity: data.humidity,
+          rainfall: data.rainfall,
+          description: data.description,
+          icon: data.icon,
+          windSpeed: data.windSpeed,
+        });
+      }
+      
       setLocationName(data.location || '');
     } catch (err) {
       console.error('Weather fetch error:', err);
@@ -102,7 +131,7 @@ export const useWeather = (): UseWeatherReturn => {
         {
           enableHighAccuracy: true,
           timeout: 10000,
-          maximumAge: 300000, // Cache location for 5 minutes
+          maximumAge: 300000,
         }
       );
     });
@@ -139,6 +168,7 @@ export const useWeather = (): UseWeatherReturn => {
 
   return {
     weather,
+    forecast,
     location,
     locationName,
     isLoading,

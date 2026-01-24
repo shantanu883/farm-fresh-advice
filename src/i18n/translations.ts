@@ -122,6 +122,12 @@ export const translations = {
     tomatoSowing: "Year-round (varies by region)",
     tomatoHarvest: "60-90 days after sowing",
 
+    // Forecast
+    fiveDayForecast: "5-Day Forecast",
+    tomorrow: "Tomorrow",
+    threeDayPlan: "3-Day Farm Plan",
+    day: "Day",
+
     // Settings
     language: "Language",
     offlineMode: "Offline Mode",
@@ -256,6 +262,12 @@ export const translations = {
     tomatoSowing: "साल भर (क्षेत्र के अनुसार)",
     tomatoHarvest: "बुवाई के 60-90 दिन बाद",
 
+    // Forecast
+    fiveDayForecast: "5 दिन का पूर्वानुमान",
+    tomorrow: "कल",
+    threeDayPlan: "3-दिन की खेती योजना",
+    day: "दिन",
+
     // Settings
     language: "भाषा",
     offlineMode: "ऑफलाइन मोड",
@@ -389,6 +401,12 @@ export const translations = {
     cottonHarvest: "ऑक्टोबर - डिसेंबर",
     tomatoSowing: "वर्षभर (प्रदेशानुसार)",
     tomatoHarvest: "पेरणीनंतर 60-90 दिवस",
+
+    // Forecast
+    fiveDayForecast: "5 दिवसांचा अंदाज",
+    tomorrow: "उद्या",
+    threeDayPlan: "3-दिवसांची शेती योजना",
+    day: "दिवस",
 
     // Settings
     language: "भाषा",
