@@ -137,6 +137,22 @@ export const translations = {
     version: "Version 1.0.0",
     aboutDescription: "A weather-integrated farming advisory system designed to help farmers make informed decisions about their daily agricultural activities.",
     developedWith: "Developed with ❤️ for the farming community.",
+
+    // Notifications
+    notifications: "Notifications",
+    notificationsNotSupported: "Push notifications are not supported on this device or browser.",
+    weatherAlerts: "Weather Alerts",
+    alertsEnabled: "You'll receive weather warnings",
+    alertsDisabled: "Enable to get weather warnings",
+    alertsDescription: "Get notified about extreme weather conditions that may affect your crops:",
+    heavyRainAlert: "Heavy rain (>20mm)",
+    frostAlert: "Frost warning (<5°C)",
+    heatAlert: "Heat warning (>40°C)",
+    windAlert: "Strong wind (>40 km/h)",
+    enabling: "Enabling...",
+    enableAlerts: "Enable Weather Alerts",
+    notificationsDenied: "Notifications are blocked. Please enable them in your browser settings.",
+    dismiss: "Dismiss",
   },
 
   hi: {
@@ -277,6 +293,22 @@ export const translations = {
     version: "संस्करण 1.0.0",
     aboutDescription: "एक मौसम-एकीकृत खेती सलाहकार प्रणाली जो किसानों को उनकी दैनिक कृषि गतिविधियों के बारे में सूचित निर्णय लेने में मदद करने के लिए डिज़ाइन की गई है।",
     developedWith: "खेती समुदाय के लिए ❤️ के साथ विकसित।",
+
+    // Notifications
+    notifications: "सूचनाएं",
+    notificationsNotSupported: "इस डिवाइस या ब्राउज़र पर पुश सूचनाएं समर्थित नहीं हैं।",
+    weatherAlerts: "मौसम अलर्ट",
+    alertsEnabled: "आपको मौसम चेतावनियां मिलेंगी",
+    alertsDisabled: "मौसम चेतावनियां पाने के लिए सक्षम करें",
+    alertsDescription: "अत्यधिक मौसम स्थितियों के बारे में सूचित रहें जो आपकी फसलों को प्रभावित कर सकती हैं:",
+    heavyRainAlert: "भारी बारिश (>20mm)",
+    frostAlert: "पाला चेतावनी (<5°C)",
+    heatAlert: "गर्मी चेतावनी (>40°C)",
+    windAlert: "तेज हवा (>40 km/h)",
+    enabling: "सक्षम हो रहा है...",
+    enableAlerts: "मौसम अलर्ट सक्षम करें",
+    notificationsDenied: "सूचनाएं अवरुद्ध हैं। कृपया अपनी ब्राउज़र सेटिंग्स में उन्हें सक्षम करें।",
+    dismiss: "खारिज करें",
   },
 
   mr: {
@@ -417,6 +449,22 @@ export const translations = {
     version: "आवृत्ती 1.0.0",
     aboutDescription: "शेतकऱ्यांना त्यांच्या दैनंदिन शेती क्रियाकलापांबद्दल माहितीपूर्ण निर्णय घेण्यास मदत करण्यासाठी डिझाइन केलेली हवामान-एकात्मिक शेती सल्लागार प्रणाली.",
     developedWith: "शेती समुदायासाठी ❤️ ने विकसित.",
+
+    // Notifications
+    notifications: "सूचना",
+    notificationsNotSupported: "या डिव्हाइस किंवा ब्राउझरवर पुश सूचना समर्थित नाहीत.",
+    weatherAlerts: "हवामान अलर्ट",
+    alertsEnabled: "तुम्हाला हवामान चेतावणी मिळतील",
+    alertsDisabled: "हवामान चेतावणी मिळवण्यासाठी सक्षम करा",
+    alertsDescription: "तुमच्या पिकांवर परिणाम करणाऱ्या अत्यंत हवामान परिस्थितीबद्दल सूचित व्हा:",
+    heavyRainAlert: "मुसळधार पाऊस (>20mm)",
+    frostAlert: "दंव चेतावणी (<5°C)",
+    heatAlert: "उष्णता चेतावणी (>40°C)",
+    windAlert: "जोरदार वारा (>40 km/h)",
+    enabling: "सक्षम करत आहे...",
+    enableAlerts: "हवामान अलर्ट सक्षम करा",
+    notificationsDenied: "सूचना अवरोधित आहेत. कृपया तुमच्या ब्राउझर सेटिंग्जमध्ये त्या सक्षम करा.",
+    dismiss: "डिसमिस करा",
   },
 } as const;
 

@@ -4,12 +4,14 @@ import AdvisoryCard from "@/components/AdvisoryCard";
 import ForecastCard from "@/components/ForecastCard";
 import ThreeDayPlanCard from "@/components/ThreeDayPlanCard";
 import AlertBanner from "@/components/AlertBanner";
+import WeatherAlertBanner from "@/components/WeatherAlertBanner";
 import BottomNavigation from "@/components/BottomNavigation";
 import { MapPin, RefreshCw, Navigation, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useWeather } from "@/hooks/useWeather";
 import { useAdvisory } from "@/hooks/useAdvisory";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
 import { Skeleton } from "@/components/ui/skeleton";
 import { FarmerProfile } from "@/types/farm";
 
@@ -33,7 +35,14 @@ const Advisory = () => {
     generateAdvisory
   } = useAdvisory();
 
+  const {
+    isSubscribed,
+    checkWeatherAlerts,
+    showLocalNotification
+  } = usePushNotifications();
+
   const [farmerProfile, setFarmerProfile] = useState<FarmerProfile | null>(null);
+  const weatherAlerts = checkWeatherAlerts(forecast);
 
   // Load farmer profile from localStorage
   useEffect(() => {
@@ -65,6 +74,18 @@ const Advisory = () => {
       generateAdvisory(weather, farmData, forecast);
     }
   }, [weather, forecast, farmerProfile]);
+
+  // Send push notifications for weather alerts
+  useEffect(() => {
+    if (isSubscribed && weatherAlerts.length > 0) {
+      // Show notification for the most severe alert
+      const dangerAlerts = weatherAlerts.filter(a => a.severity === 'danger');
+      const alertToShow = dangerAlerts[0] || weatherAlerts[0];
+      if (alertToShow) {
+        showLocalNotification(alertToShow);
+      }
+    }
+  }, [isSubscribed, weatherAlerts, showLocalNotification]);
 
   const handleRefresh = async () => {
     await refreshWeather();
@@ -119,6 +140,11 @@ const Advisory = () => {
         </Button>
       </div>
 
+      {/* Weather Alerts */}
+      {weatherAlerts.length > 0 && (
+        <WeatherAlertBanner alerts={weatherAlerts} />
+      )}
+
       {/* Error Banner */}
       {error && (
         <AlertBanner
@@ -129,7 +155,7 @@ const Advisory = () => {
       )}
 
       {/* Alert Banner */}
-      {advisory?.riskLevel === 'high' && (
+      {advisory?.riskLevel === 'high' && !weatherAlerts.length && (
         <AlertBanner
           message={t("heavyRainfallWarning")}
           type="warning"
