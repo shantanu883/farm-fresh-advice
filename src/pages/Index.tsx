@@ -152,7 +152,7 @@ const Home = () => {
             <div className="mb-3 flex items-center justify-between">
               <h2 className="text-farmer-lg font-semibold text-foreground">{t("myFarms")}</h2>
               <button 
-                onClick={() => navigate("/settings")}
+                onClick={() => navigate("/farms")}
                 className="text-farmer-sm font-medium text-primary"
               >
                 {t("viewAll")}

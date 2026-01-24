@@ -59,6 +59,7 @@ export const translations = {
     myFarms: "My Farms",
     noFarmsYet: "No farms added yet",
     addFirstFarm: "Add your first farm to get started",
+    getAdviceForFarm: "Get Advice for This Farm",
 
     // Home Screen
     getTodaysAdvice: "Get Today's Advice",
@@ -249,6 +250,7 @@ export const translations = {
     myFarms: "मेरे खेत",
     noFarmsYet: "अभी तक कोई खेत नहीं जोड़ा गया",
     addFirstFarm: "शुरू करने के लिए अपना पहला खेत जोड़ें",
+    getAdviceForFarm: "इस खेत के लिए सलाह लें",
 
     // Home Screen
     getTodaysAdvice: "आज की सलाह प्राप्त करें",
@@ -439,6 +441,7 @@ export const translations = {
     myFarms: "माझी शेते",
     noFarmsYet: "अद्याप कोणतेही शेत जोडलेले नाही",
     addFirstFarm: "सुरू करण्यासाठी आपले पहिले शेत जोडा",
+    getAdviceForFarm: "या शेतासाठी सल्ला घ्या",
 
     // Home Screen
     getTodaysAdvice: "आजचा सल्ला मिळवा",
