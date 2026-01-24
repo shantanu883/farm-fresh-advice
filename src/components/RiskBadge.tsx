@@ -10,21 +10,33 @@ interface RiskBadgeProps {
   className?: string;
 }
 
-const riskConfig: Record<RiskLevel, { labelKey: TranslationKey; icon: typeof CheckCircle; className: string }> = {
+const riskConfig: Record<RiskLevel, { 
+  labelKey: TranslationKey; 
+  icon: typeof CheckCircle; 
+  bgClass: string;
+  textClass: string;
+  borderClass: string;
+}> = {
   low: {
     labelKey: "lowRisk",
     icon: CheckCircle,
-    className: "risk-low",
+    bgClass: "bg-gradient-to-r from-green-100 to-green-50 dark:from-green-900/30 dark:to-green-900/20",
+    textClass: "text-green-700 dark:text-green-300",
+    borderClass: "border-green-200/60 dark:border-green-700/40",
   },
   medium: {
     labelKey: "mediumRisk",
     icon: AlertCircle,
-    className: "risk-medium",
+    bgClass: "bg-gradient-to-r from-amber-100 to-amber-50 dark:from-amber-900/30 dark:to-amber-900/20",
+    textClass: "text-amber-700 dark:text-amber-300",
+    borderClass: "border-amber-200/60 dark:border-amber-700/40",
   },
   high: {
     labelKey: "highRisk",
     icon: AlertTriangle,
-    className: "risk-high",
+    bgClass: "bg-gradient-to-r from-red-100 to-red-50 dark:from-red-900/30 dark:to-red-900/20",
+    textClass: "text-red-700 dark:text-red-300",
+    borderClass: "border-red-200/60 dark:border-red-700/40",
   },
 };
 
@@ -36,13 +48,15 @@ const RiskBadge = ({ level, className }: RiskBadgeProps) => {
   return (
     <div
       className={cn(
-        "inline-flex items-center gap-2 rounded-full border px-4 py-2 font-semibold",
-        config.className,
+        "inline-flex items-center gap-2 rounded-full border px-4 py-2 font-semibold transition-all",
+        config.bgClass,
+        config.textClass,
+        config.borderClass,
         className
       )}
     >
-      <Icon className="h-5 w-5" />
-      <span className="text-farmer-sm">{t(config.labelKey)}</span>
+      <Icon className="h-4 w-4" />
+      <span className="text-sm">{t(config.labelKey)}</span>
     </div>
   );
 };
