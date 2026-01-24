@@ -6,6 +6,7 @@ import ThreeDayPlanCard from "@/components/ThreeDayPlanCard";
 import PestAlertCard from "@/components/PestAlertCard";
 import AlertBanner from "@/components/AlertBanner";
 import WeatherAlertBanner from "@/components/WeatherAlertBanner";
+import ListenButton from "@/components/ListenButton";
 import BottomNavigation from "@/components/BottomNavigation";
 import { MapPin, RefreshCw, Navigation, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -207,6 +208,14 @@ const Advisory = () => {
           fertilizerAdvice={advisory?.fertilizerAdvice}
           isLoading={isAdvisoryLoading}
         />
+        
+        {/* Listen to Advice Button */}
+        {advisory?.mainAdvice && (
+          <ListenButton 
+            text={advisory.mainAdvice} 
+            className="mt-4 w-full"
+          />
+        )}
       </div>
 
       {/* 3-Day Plan */}
