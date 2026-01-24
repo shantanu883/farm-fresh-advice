@@ -10,20 +10,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { User, MapPin, Calendar, Info, Tractor, Navigation } from "lucide-react";
+import { User, MapPin, Calendar, Info, Tractor, Navigation, Globe, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { Farm, FarmerProfile } from "@/types/farm";
 import { useFarmerProfile } from "@/hooks/useFarmerProfile";
+import { Language } from "@/i18n/translations";
 import FarmCard from "@/components/FarmCard";
 import AddFarmDialog from "@/components/AddFarmDialog";
 import { toast } from "sonner";
 
+const languages: { code: Language; label: string; native: string }[] = [
+  { code: "en", label: "English", native: "English" },
+  { code: "hi", label: "Hindi", native: "हिंदी" },
+  { code: "mr", label: "Marathi", native: "मराठी" },
+];
+
 const Onboarding = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
   const { user } = useAuth();
   const { saveProfile } = useFarmerProfile();
+  const [step, setStep] = useState<"language" | "profile">("language");
   const [isGPSLoading, setIsGPSLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   
@@ -64,6 +72,14 @@ const Onboarding = () => {
     { value: "zaid", label: t("zaid") },
   ];
 
+  const handleLanguageSelect = (langCode: Language) => {
+    setLanguage(langCode);
+  };
+
+  const handleContinueToProfile = () => {
+    setStep("profile");
+  };
+
   const handleAddFarm = (farm: Farm) => {
     setProfile({ ...profile, farms: [...profile.farms, farm] });
   };
@@ -101,6 +117,81 @@ const Onboarding = () => {
 
   const isFormValid = profile.location && profile.farms.length > 0 && profile.farmingSeason;
 
+  // Step 1: Language Selection
+  if (step === "language") {
+    return (
+      <div className="flex min-h-screen flex-col bg-background">
+        {/* Header */}
+        <div className="flex flex-1 flex-col items-center justify-center px-6 py-12">
+          {/* Decorative background */}
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-primary/5" />
+            <div className="absolute -bottom-32 -left-32 h-80 w-80 rounded-full bg-accent/10" />
+          </div>
+
+          {/* Content */}
+          <div className="relative z-10 flex flex-col items-center text-center">
+            {/* Icon */}
+            <div className="mb-8 flex h-20 w-20 items-center justify-center rounded-2xl bg-primary/10">
+              <Globe className="h-10 w-10 text-primary" />
+            </div>
+
+            {/* Title */}
+            <h1 className="mb-3 text-farmer-2xl font-bold text-foreground">
+              {t("selectLanguage")}
+            </h1>
+
+            {/* Subtitle */}
+            <p className="mb-8 max-w-xs text-farmer-base text-muted-foreground">
+              {t("choosePreferredLanguage")}
+            </p>
+
+            {/* Language Buttons */}
+            <div className="flex w-full max-w-xs flex-col gap-3">
+              {languages.map((lang) => (
+                <Button
+                  key={lang.code}
+                  variant={language === lang.code ? "default" : "outline"}
+                  size="xl"
+                  onClick={() => handleLanguageSelect(lang.code)}
+                  className={`w-full justify-between gap-3 ${
+                    language === lang.code 
+                      ? "border-2 border-primary" 
+                      : "border-2 border-border"
+                  }`}
+                >
+                  <span className="text-farmer-lg">{lang.native}</span>
+                  {lang.code !== "en" && (
+                    <span className="text-farmer-sm opacity-70">({lang.label})</span>
+                  )}
+                </Button>
+              ))}
+            </div>
+
+            {/* Continue Button */}
+            <Button
+              variant="hero"
+              size="xl"
+              onClick={handleContinueToProfile}
+              className="mt-8 w-full max-w-xs"
+            >
+              {t("continue")}
+              <ChevronRight className="ml-2 h-5 w-5" />
+            </Button>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-center border-t border-border bg-muted/30 py-4">
+          <p className="text-farmer-sm text-muted-foreground">
+            {t("madeForFarmers")}
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  // Step 2: Profile Setup
   return (
     <div className="flex min-h-screen flex-col bg-background">
       {/* Header */}
