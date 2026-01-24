@@ -13,7 +13,7 @@ import ListenButton from "@/components/ListenButton";
 
 const Farms = () => {
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { profile } = useFarmerProfile();
   const { weather, forecast } = useWeather();
   const { generateAdvisory } = useAdvisory();
@@ -57,7 +57,7 @@ const Farms = () => {
             weather: weatherInput, 
             forecast, 
             farm: farmData, 
-            language: localStorage.getItem('preferredLanguage') || 'en'
+            language 
           }
         })
       );

@@ -38,139 +38,299 @@ interface PestAlert {
   prevention: string[];
 }
 
+// Pest/disease translations
+const pestTranslations = {
+  en: {
+    fungalDiseases: 'Fungal Diseases (Blight/Mildew)',
+    fungalConditions: 'High humidity with warm temperatures favors fungal growth',
+    fungalPrevention: [
+      'Apply copper-based fungicide preventively',
+      'Ensure good air circulation between plants',
+      'Avoid overhead irrigation',
+      'Remove and destroy infected plant parts'
+    ],
+    aphids: 'Aphids',
+    aphidsConditions: 'Warm, dry weather promotes rapid aphid reproduction',
+    aphidsPrevention: [
+      'Spray neem oil solution (2-3ml/L)',
+      'Introduce ladybugs as natural predators',
+      'Use yellow sticky traps for monitoring',
+      'Spray strong water jet to dislodge aphids'
+    ],
+    spiderMites: 'Spider Mites',
+    spiderMitesConditions: 'Hot, dry conditions are ideal for spider mite outbreaks',
+    spiderMitesPrevention: [
+      'Increase humidity around plants with misting',
+      'Apply sulfur-based miticide',
+      'Spray water on leaf undersides',
+      'Avoid dusty conditions near crops'
+    ],
+    whiteflies: 'Whiteflies',
+    whitefliesConditions: 'Moderate warmth with humidity favors whitefly activity',
+    whitefliesPrevention: [
+      'Use yellow sticky traps',
+      'Apply neem-based insecticide',
+      'Introduce parasitic wasps (Encarsia)',
+      'Remove heavily infested leaves'
+    ],
+    bacterialDiseases: 'Bacterial Diseases',
+    bacterialConditions: 'Prolonged wet conditions promote bacterial infections',
+    bacterialPrevention: [
+      'Improve field drainage',
+      'Avoid working in wet fields',
+      'Apply streptocycline spray preventively',
+      'Space plants for better air circulation'
+    ],
+    rootRot: 'Root Rot',
+    rootRotConditions: 'Waterlogged soil leads to root diseases',
+    rootRotPrevention: [
+      'Ensure proper field drainage',
+      'Create raised beds if possible',
+      'Apply Trichoderma to soil',
+      'Reduce irrigation frequency'
+    ],
+    fruitFlies: 'Fruit Flies',
+    fruitFliesConditions: 'Warm, humid weather increases fruit fly activity',
+    fruitFliesPrevention: [
+      'Set up pheromone traps',
+      'Collect and destroy fallen fruits',
+      'Apply protein bait sprays',
+      'Harvest fruits at proper maturity'
+    ],
+    caterpillars: 'Caterpillars & Borers',
+    caterpillarsConditions: 'Post-rain warmth triggers caterpillar emergence',
+    caterpillarsPrevention: [
+      'Apply Bt (Bacillus thuringiensis) spray',
+      'Set up pheromone traps for monitoring',
+      'Hand-pick visible caterpillars',
+      'Spray neem oil on affected areas'
+    ]
+  },
+  hi: {
+    fungalDiseases: 'फफूंद रोग (झुलसा/फफूंदी)',
+    fungalConditions: 'उच्च आर्द्रता और गर्म तापमान फफूंद वृद्धि को बढ़ावा देते हैं',
+    fungalPrevention: [
+      'तांबा आधारित फफूंदनाशक का निवारक छिड़काव करें',
+      'पौधों के बीच अच्छी वायु संचार सुनिश्चित करें',
+      'ऊपरी सिंचाई से बचें',
+      'संक्रमित पौधों के भागों को हटाएं और नष्ट करें'
+    ],
+    aphids: 'माहू (एफिड्स)',
+    aphidsConditions: 'गर्म, शुष्क मौसम माहू की तेजी से वृद्धि को बढ़ावा देता है',
+    aphidsPrevention: [
+      'नीम तेल का घोल (2-3ml/L) छिड़कें',
+      'प्राकृतिक शिकारी के रूप में लेडीबग लाएं',
+      'निगरानी के लिए पीले चिपचिपे जाल का उपयोग करें',
+      'माहू को हटाने के लिए तेज पानी की धार का छिड़काव करें'
+    ],
+    spiderMites: 'मकड़ी के कण',
+    spiderMitesConditions: 'गर्म, शुष्क स्थितियां मकड़ी के कण के प्रकोप के लिए आदर्श हैं',
+    spiderMitesPrevention: [
+      'धुंध से पौधों के आसपास नमी बढ़ाएं',
+      'सल्फर आधारित माइटिसाइड लगाएं',
+      'पत्तियों के नीचे की तरफ पानी का छिड़काव करें',
+      'फसलों के पास धूल भरी स्थितियों से बचें'
+    ],
+    whiteflies: 'सफेद मक्खी',
+    whitefliesConditions: 'मध्यम गर्मी और आर्द्रता सफेद मक्खी की गतिविधि को बढ़ावा देती है',
+    whitefliesPrevention: [
+      'पीले चिपचिपे जाल का उपयोग करें',
+      'नीम आधारित कीटनाशक लगाएं',
+      'परजीवी ततैया (एनकार्सिया) लाएं',
+      'अत्यधिक संक्रमित पत्तियां हटाएं'
+    ],
+    bacterialDiseases: 'जीवाणु रोग',
+    bacterialConditions: 'लंबे समय तक गीली स्थितियां जीवाणु संक्रमण को बढ़ावा देती हैं',
+    bacterialPrevention: [
+      'खेत की जल निकासी में सुधार करें',
+      'गीले खेतों में काम करने से बचें',
+      'स्ट्रेप्टोसाइक्लिन का निवारक छिड़काव करें',
+      'बेहतर वायु संचार के लिए पौधों को दूर-दूर लगाएं'
+    ],
+    rootRot: 'जड़ सड़न',
+    rootRotConditions: 'जलभराव वाली मिट्टी जड़ रोगों का कारण बनती है',
+    rootRotPrevention: [
+      'उचित खेत जल निकासी सुनिश्चित करें',
+      'यदि संभव हो तो उठी हुई क्यारियां बनाएं',
+      'मिट्टी में ट्राइकोडर्मा लगाएं',
+      'सिंचाई की आवृत्ति कम करें'
+    ],
+    fruitFlies: 'फल मक्खी',
+    fruitFliesConditions: 'गर्म, आर्द्र मौसम फल मक्खी की गतिविधि बढ़ाता है',
+    fruitFliesPrevention: [
+      'फेरोमोन ट्रैप लगाएं',
+      'गिरे हुए फलों को इकट्ठा करके नष्ट करें',
+      'प्रोटीन बैट स्प्रे लगाएं',
+      'उचित परिपक्वता पर फलों की कटाई करें'
+    ],
+    caterpillars: 'सुंडी और छेदक',
+    caterpillarsConditions: 'बारिश के बाद गर्मी सुंडी के उभरने को बढ़ावा देती है',
+    caterpillarsPrevention: [
+      'बीटी (बैसिलस थुरिंजिएंसिस) स्प्रे लगाएं',
+      'निगरानी के लिए फेरोमोन ट्रैप लगाएं',
+      'दिखाई देने वाली सुंडियों को हाथ से चुनें',
+      'प्रभावित क्षेत्रों पर नीम तेल का छिड़काव करें'
+    ]
+  },
+  mr: {
+    fungalDiseases: 'बुरशीजन्य रोग (करपा/भुरी)',
+    fungalConditions: 'उच्च आर्द्रता आणि उबदार तापमान बुरशीच्या वाढीस अनुकूल असते',
+    fungalPrevention: [
+      'तांबे आधारित बुरशीनाशकाची प्रतिबंधात्मक फवारणी करा',
+      'झाडांमध्ये चांगले हवा खेळण्याची खात्री करा',
+      'वरून पाणी देणे टाळा',
+      'संक्रमित वनस्पतींचे भाग काढून नष्ट करा'
+    ],
+    aphids: 'मावा',
+    aphidsConditions: 'उबदार, कोरडे हवामान माव्याच्या जलद वाढीस प्रोत्साहन देते',
+    aphidsPrevention: [
+      'कडुलिंबाच्या तेलाचे द्रावण (2-3ml/L) फवारा',
+      'नैसर्गिक शिकारी म्हणून लेडीबग आणा',
+      'देखरेखीसाठी पिवळे चिकट सापळे वापरा',
+      'मावा काढण्यासाठी जोरदार पाण्याचा फवारा मारा'
+    ],
+    spiderMites: 'कोळी माइट्स',
+    spiderMitesConditions: 'गरम, कोरडी परिस्थिती कोळी माइट्सच्या प्रादुर्भावासाठी आदर्श आहे',
+    spiderMitesPrevention: [
+      'धुक्याने झाडांभोवती आर्द्रता वाढवा',
+      'गंधक आधारित माइटिसाइड लावा',
+      'पानांच्या खालच्या बाजूस पाणी फवारा',
+      'पिकांजवळ धुळीची परिस्थिती टाळा'
+    ],
+    whiteflies: 'पांढरी माशी',
+    whitefliesConditions: 'मध्यम उष्णता आणि आर्द्रता पांढऱ्या माशीच्या क्रियाकलापांना अनुकूल आहे',
+    whitefliesPrevention: [
+      'पिवळे चिकट सापळे वापरा',
+      'कडुलिंब आधारित कीटकनाशक लावा',
+      'परजीवी मावळी (एनकार्सिया) आणा',
+      'जास्त संक्रमित पाने काढा'
+    ],
+    bacterialDiseases: 'जिवाणूजन्य रोग',
+    bacterialConditions: 'दीर्घकाळ ओले राहिल्याने जिवाणू संसर्गास प्रोत्साहन मिळते',
+    bacterialPrevention: [
+      'शेताचा निचरा सुधारा',
+      'ओल्या शेतात काम करणे टाळा',
+      'स्ट्रेप्टोसायक्लिनची प्रतिबंधात्मक फवारणी करा',
+      'चांगल्या हवा खेळण्यासाठी झाडे अंतरावर लावा'
+    ],
+    rootRot: 'मुळकुज',
+    rootRotConditions: 'पाणी साचलेली माती मुळांच्या रोगांना कारणीभूत ठरते',
+    rootRotPrevention: [
+      'योग्य शेत निचरा सुनिश्चित करा',
+      'शक्य असल्यास उंचवटा वाफे तयार करा',
+      'मातीत ट्रायकोडर्मा लावा',
+      'सिंचनाची वारंवारता कमी करा'
+    ],
+    fruitFlies: 'फळमाशी',
+    fruitFliesConditions: 'उबदार, दमट हवामान फळमाशीच्या क्रियाकलाप वाढवते',
+    fruitFliesPrevention: [
+      'फेरोमोन सापळे लावा',
+      'गळालेली फळे गोळा करून नष्ट करा',
+      'प्रथिने आमिष फवारे लावा',
+      'योग्य परिपक्वतेवर फळांची कापणी करा'
+    ],
+    caterpillars: 'अळी आणि खोडकिडा',
+    caterpillarsConditions: 'पावसानंतरची उष्णता अळी बाहेर येण्यास प्रवृत्त करते',
+    caterpillarsPrevention: [
+      'बीटी (बॅसिलस थुरिंजिएन्सिस) फवारा लावा',
+      'देखरेखीसाठी फेरोमोन सापळे लावा',
+      'दिसणाऱ्या अळ्या हाताने वेचा',
+      'प्रभावित भागावर कडुलिंब तेल फवारा'
+    ]
+  }
+};
+
 // Analyze weather conditions for pest/disease risks
-function analyzePestRisks(weather: WeatherData, forecast: ForecastDay[]): PestAlert[] {
+function analyzePestRisks(weather: WeatherData, forecast: ForecastDay[], language: string = 'en'): PestAlert[] {
   const alerts: PestAlert[] = [];
   const temp = weather.temperature;
   const humidity = weather.humidity;
   const rainfall = weather.rainfall;
+  const t = pestTranslations[language as keyof typeof pestTranslations] || pestTranslations.en;
   
   // Check forecast for prolonged conditions
   const avgForecastHumidity = forecast.length > 0 
     ? forecast.reduce((sum, d) => sum + d.humidity, 0) / forecast.length 
     : humidity;
   const totalForecastRain = forecast.reduce((sum, d) => sum + d.rainfall, 0);
-  const avgForecastTemp = forecast.length > 0
-    ? forecast.reduce((sum, d) => sum + d.temperature, 0) / forecast.length
-    : temp;
 
   // Fungal diseases (Late blight, Early blight, Powdery mildew)
   if (humidity > 80 && temp >= 18 && temp <= 28) {
     alerts.push({
-      pest: 'Fungal Diseases (Blight/Mildew)',
+      pest: t.fungalDiseases,
       risk: humidity > 90 ? 'high' : 'medium',
-      conditions: 'High humidity with warm temperatures favors fungal growth',
-      prevention: [
-        'Apply copper-based fungicide preventively',
-        'Ensure good air circulation between plants',
-        'Avoid overhead irrigation',
-        'Remove and destroy infected plant parts'
-      ]
+      conditions: t.fungalConditions,
+      prevention: t.fungalPrevention
     });
   }
 
   // Aphids - warm, dry conditions
   if (temp >= 25 && temp <= 35 && humidity < 60 && rainfall < 2) {
     alerts.push({
-      pest: 'Aphids',
+      pest: t.aphids,
       risk: temp > 30 && humidity < 50 ? 'high' : 'medium',
-      conditions: 'Warm, dry weather promotes rapid aphid reproduction',
-      prevention: [
-        'Spray neem oil solution (2-3ml/L)',
-        'Introduce ladybugs as natural predators',
-        'Use yellow sticky traps for monitoring',
-        'Spray strong water jet to dislodge aphids'
-      ]
+      conditions: t.aphidsConditions,
+      prevention: t.aphidsPrevention
     });
   }
 
   // Spider mites - hot, dry conditions
   if (temp >= 30 && humidity < 50 && rainfall < 1) {
     alerts.push({
-      pest: 'Spider Mites',
+      pest: t.spiderMites,
       risk: 'high',
-      conditions: 'Hot, dry conditions are ideal for spider mite outbreaks',
-      prevention: [
-        'Increase humidity around plants with misting',
-        'Apply sulfur-based miticide',
-        'Spray water on leaf undersides',
-        'Avoid dusty conditions near crops'
-      ]
+      conditions: t.spiderMitesConditions,
+      prevention: t.spiderMitesPrevention
     });
   }
 
   // Whiteflies - warm, humid conditions
   if (temp >= 22 && temp <= 32 && humidity >= 60 && humidity <= 80) {
     alerts.push({
-      pest: 'Whiteflies',
+      pest: t.whiteflies,
       risk: 'medium',
-      conditions: 'Moderate warmth with humidity favors whitefly activity',
-      prevention: [
-        'Use yellow sticky traps',
-        'Apply neem-based insecticide',
-        'Introduce parasitic wasps (Encarsia)',
-        'Remove heavily infested leaves'
-      ]
+      conditions: t.whitefliesConditions,
+      prevention: t.whitefliesPrevention
     });
   }
 
   // Bacterial diseases - prolonged wet conditions
   if ((rainfall > 10 || totalForecastRain > 30) && avgForecastHumidity > 75) {
     alerts.push({
-      pest: 'Bacterial Diseases',
+      pest: t.bacterialDiseases,
       risk: totalForecastRain > 50 ? 'high' : 'medium',
-      conditions: 'Prolonged wet conditions promote bacterial infections',
-      prevention: [
-        'Improve field drainage',
-        'Avoid working in wet fields',
-        'Apply streptocycline spray preventively',
-        'Space plants for better air circulation'
-      ]
+      conditions: t.bacterialConditions,
+      prevention: t.bacterialPrevention
     });
   }
 
   // Root rot - wet soil conditions
   if (rainfall > 20 || totalForecastRain > 40) {
     alerts.push({
-      pest: 'Root Rot',
+      pest: t.rootRot,
       risk: 'high',
-      conditions: 'Waterlogged soil leads to root diseases',
-      prevention: [
-        'Ensure proper field drainage',
-        'Create raised beds if possible',
-        'Apply Trichoderma to soil',
-        'Reduce irrigation frequency'
-      ]
+      conditions: t.rootRotConditions,
+      prevention: t.rootRotPrevention
     });
   }
 
   // Fruit flies - warm, humid with ripe fruits
   if (temp >= 25 && temp <= 35 && humidity >= 60) {
     alerts.push({
-      pest: 'Fruit Flies',
+      pest: t.fruitFlies,
       risk: humidity > 75 ? 'high' : 'medium',
-      conditions: 'Warm, humid weather increases fruit fly activity',
-      prevention: [
-        'Set up pheromone traps',
-        'Collect and destroy fallen fruits',
-        'Apply protein bait sprays',
-        'Harvest fruits at proper maturity'
-      ]
+      conditions: t.fruitFliesConditions,
+      prevention: t.fruitFliesPrevention
     });
   }
 
   // Caterpillars/Borers - moderate conditions after rain
   if (temp >= 20 && temp <= 30 && (rainfall > 5 || totalForecastRain > 15)) {
     alerts.push({
-      pest: 'Caterpillars & Borers',
+      pest: t.caterpillars,
       risk: 'medium',
-      conditions: 'Post-rain warmth triggers caterpillar emergence',
-      prevention: [
-        'Apply Bt (Bacillus thuringiensis) spray',
-        'Set up pheromone traps for monitoring',
-        'Hand-pick visible caterpillars',
-        'Spray neem oil on affected areas'
-      ]
+      conditions: t.caterpillarsConditions,
+      prevention: t.caterpillarsPrevention
     });
   }
 
@@ -211,9 +371,9 @@ serve(async (req) => {
     const forecastData = (forecast || []) as ForecastDay[];
     const farmData = farm as FarmData | undefined;
 
-    // Generate pest/disease alerts based on weather
-    const pestAlerts = analyzePestRisks(weatherData, forecastData);
-    console.log('Pest alerts generated:', pestAlerts.length);
+    // Generate pest/disease alerts based on weather (in selected language)
+    const pestAlerts = analyzePestRisks(weatherData, forecastData, language);
+    console.log('Pest alerts generated:', pestAlerts.length, 'in language:', language);
 
     const languageInstruction = language === 'hi' 
       ? 'Respond in Hindi using Devanagari script.' 
