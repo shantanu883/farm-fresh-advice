@@ -166,6 +166,23 @@ export const translations = {
     pestAlerts: "Pest & Disease Alerts",
     pestAlertsSubtitle: "Based on current weather conditions",
     preventiveMeasures: "Preventive Measures",
+
+    // Authentication
+    login: "Login",
+    signUp: "Sign Up",
+    email: "Email",
+    password: "Password",
+    enterEmail: "Enter your email",
+    enterPassword: "Enter your password",
+    pleaseWait: "Please wait...",
+    dontHaveAccount: "Don't have an account? Sign up",
+    alreadyHaveAccount: "Already have an account? Login",
+    invalidCredentials: "Invalid email or password",
+    userAlreadyExists: "An account with this email already exists",
+    unexpectedError: "An unexpected error occurred",
+    logout: "Logout",
+    loggingOut: "Logging out...",
+    account: "Account",
   },
 
   hi: {
@@ -335,6 +352,23 @@ export const translations = {
     pestAlerts: "कीट और रोग अलर्ट",
     pestAlertsSubtitle: "वर्तमान मौसम परिस्थितियों के आधार पर",
     preventiveMeasures: "निवारक उपाय",
+
+    // Authentication
+    login: "लॉगिन",
+    signUp: "साइन अप",
+    email: "ईमेल",
+    password: "पासवर्ड",
+    enterEmail: "अपना ईमेल दर्ज करें",
+    enterPassword: "अपना पासवर्ड दर्ज करें",
+    pleaseWait: "कृपया प्रतीक्षा करें...",
+    dontHaveAccount: "खाता नहीं है? साइन अप करें",
+    alreadyHaveAccount: "पहले से खाता है? लॉगिन करें",
+    invalidCredentials: "गलत ईमेल या पासवर्ड",
+    userAlreadyExists: "इस ईमेल से पहले से खाता मौजूद है",
+    unexpectedError: "एक अप्रत्याशित त्रुटि हुई",
+    logout: "लॉगआउट",
+    loggingOut: "लॉगआउट हो रहा है...",
+    account: "खाता",
   },
 
   mr: {
@@ -504,6 +538,23 @@ export const translations = {
     pestAlerts: "कीटक आणि रोग अलर्ट",
     pestAlertsSubtitle: "सध्याच्या हवामान परिस्थितीवर आधारित",
     preventiveMeasures: "प्रतिबंधात्मक उपाय",
+
+    // Authentication
+    login: "लॉगिन",
+    signUp: "साइन अप",
+    email: "ईमेल",
+    password: "पासवर्ड",
+    enterEmail: "तुमचा ईमेल प्रविष्ट करा",
+    enterPassword: "तुमचा पासवर्ड प्रविष्ट करा",
+    pleaseWait: "कृपया प्रतीक्षा करा...",
+    dontHaveAccount: "खाते नाही? साइन अप करा",
+    alreadyHaveAccount: "आधीच खाते आहे? लॉगिन करा",
+    invalidCredentials: "चुकीचा ईमेल किंवा पासवर्ड",
+    userAlreadyExists: "या ईमेलसह खाते आधीच अस्तित्वात आहे",
+    unexpectedError: "एक अनपेक्षित त्रुटी आली",
+    logout: "लॉगआउट",
+    loggingOut: "लॉगआउट होत आहे...",
+    account: "खाते",
   },
 } as const;
 

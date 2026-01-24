@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -7,13 +9,30 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import BottomNavigation from "@/components/BottomNavigation";
-import { Settings as SettingsIcon, Globe, WifiOff, Info, Sprout } from "lucide-react";
+import { Settings as SettingsIcon, Globe, WifiOff, Info, Sprout, LogOut, User } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { Language } from "@/i18n/translations";
 import NotificationSettings from "@/components/NotificationSettings";
+import { useNavigate } from "react-router-dom";
 
 const Settings = () => {
   const { language, setLanguage, t } = useLanguage();
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await signOut();
+      navigate("/auth");
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      setIsLoggingOut(false);
+    }
+  };
 
   return (
     <div className="page-container">
@@ -28,6 +47,37 @@ const Settings = () => {
       </div>
 
       <div className="space-y-4">
+        {/* Account Section */}
+        <Card className="card-elevated p-5">
+          <div className="mb-4 flex items-center gap-3">
+            <User className="h-6 w-6 text-primary" />
+            <h2 className="text-farmer-lg font-semibold text-foreground">
+              {t("account")}
+            </h2>
+          </div>
+          <div className="space-y-4">
+            {/* Email Display */}
+            <div className="rounded-lg bg-muted p-3">
+              <p className="text-farmer-sm text-muted-foreground">Email</p>
+              <p className="text-farmer-base font-medium text-foreground">
+                {user?.email}
+              </p>
+            </div>
+            
+            {/* Logout Button */}
+            <Button
+              variant="destructive"
+              size="lg"
+              onClick={handleLogout}
+              disabled={isLoggingOut}
+              className="w-full"
+            >
+              <LogOut className="mr-2 h-5 w-5" />
+              {isLoggingOut ? t("loggingOut") : t("logout")}
+            </Button>
+          </div>
+        </Card>
+
         {/* Notification Settings */}
         <NotificationSettings />
 
