@@ -7,6 +7,9 @@ interface WeatherData {
   temperature: number;
   humidity: number;
   rainfall: number;
+  description?: string;
+  icon?: string;
+  windSpeed?: number;
 }
 
 interface WeatherCardProps {
