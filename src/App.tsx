@@ -38,9 +38,19 @@ const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   return <>{children}</>;
 };
 
-// Onboarding guard component - checks if profile is complete
+// Onboarding guard component - checks if profile is complete (waits for profile check)
 const OnboardingGuard = ({ children }: { children: React.ReactNode }) => {
+  const { profileChecked } = useAuth();
   const isOnboardingComplete = localStorage.getItem("onboardingComplete") === "true";
+  
+  // Wait for profile check to complete before deciding
+  if (!profileChecked) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+      </div>
+    );
+  }
   
   if (!isOnboardingComplete) {
     return <Navigate to="/onboarding" replace />;
