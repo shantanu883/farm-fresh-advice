@@ -188,6 +188,9 @@ export const translations = {
     loading: "Loading...",
     stopListening: "Stop",
     listenToAdvice: "Listen to Advice",
+    confirmPassword: "Confirm Password",
+    reEnterPassword: "Re-enter your password",
+    passwordsDoNotMatch: "Passwords do not match",
   },
 
   hi: {
@@ -379,6 +382,9 @@ export const translations = {
     loading: "लोड हो रहा है...",
     stopListening: "रोकें",
     listenToAdvice: "सलाह सुनें",
+    confirmPassword: "पासवर्ड की पुष्टि करें",
+    reEnterPassword: "पासवर्ड दोबारा दर्ज करें",
+    passwordsDoNotMatch: "पासवर्ड मेल नहीं खाते",
   },
 
   mr: {
@@ -570,6 +576,9 @@ export const translations = {
     loading: "लोड होत आहे...",
     stopListening: "थांबा",
     listenToAdvice: "सल्ला ऐका",
+    confirmPassword: "पासवर्डची पुष्टी करा",
+    reEnterPassword: "पासवर्ड पुन्हा प्रविष्ट करा",
+    passwordsDoNotMatch: "पासवर्ड जुळत नाहीत",
   },
 } as const;
 
