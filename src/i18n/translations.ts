@@ -4,6 +4,7 @@ export const translations = {
     appName: "Smart Crop Advisory",
     tagline: "Daily farming decisions using weather",
     selectLanguage: "Select Language",
+    choosePreferredLanguage: "Choose your preferred language for the app",
     madeForFarmers: "Made for farmers 🌾",
 
     // Onboarding
@@ -190,6 +191,7 @@ export const translations = {
     appName: "स्मार्ट फसल सलाहकार",
     tagline: "मौसम के आधार पर दैनिक खेती के फैसले",
     selectLanguage: "भाषा चुनें",
+    choosePreferredLanguage: "ऐप के लिए अपनी पसंदीदा भाषा चुनें",
     madeForFarmers: "किसानों के लिए बनाया गया 🌾",
 
     // Onboarding
@@ -376,6 +378,7 @@ export const translations = {
     appName: "स्मार्ट पीक सल्लागार",
     tagline: "हवामानावर आधारित दैनंदिन शेती निर्णय",
     selectLanguage: "भाषा निवडा",
+    choosePreferredLanguage: "अॅपसाठी तुमची पसंतीची भाषा निवडा",
     madeForFarmers: "शेतकऱ्यांसाठी बनवलेले 🌾",
 
     // Onboarding
