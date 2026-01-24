@@ -23,15 +23,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   // Check if user has a profile in the database
   const checkUserProfile = async (userId: string) => {
     try {
-      const { data: profile } = await supabase
+      console.log("Checking profile for user:", userId);
+      const { data: profile, error } = await supabase
         .from('profiles')
         .select('id')
         .eq('user_id', userId)
         .maybeSingle();
       
+      if (error) {
+        console.error('Error checking profile:', error);
+      }
+      
       if (profile) {
+        console.log("Profile found, marking onboarding complete");
         // User has a profile, mark onboarding as complete
         localStorage.setItem('onboardingComplete', 'true');
+      } else {
+        console.log("No profile found for user");
+        // Make sure to clear it if no profile exists
+        localStorage.removeItem('onboardingComplete');
       }
     } catch (error) {
       console.error('Error checking profile:', error);
@@ -44,14 +54,23 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log("Auth state changed:", event, session?.user?.id);
         setSession(session);
         setUser(session?.user ?? null);
         
+        // Reset profile checked state on auth change
+        if (event === 'SIGNED_OUT') {
+          setProfileChecked(true);
+          setLoading(false);
+          return;
+        }
+        
         // Check for existing profile after sign in
-        if (session?.user && (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED')) {
+        if (session?.user && (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'INITIAL_SESSION')) {
           // Use setTimeout to avoid Supabase deadlock
-          setTimeout(() => {
-            checkUserProfile(session.user.id);
+          setTimeout(async () => {
+            await checkUserProfile(session.user.id);
+            setLoading(false);
           }, 0);
         } else if (!session?.user) {
           setProfileChecked(true);
