@@ -22,7 +22,8 @@ serve(async (req) => {
       );
     }
 
-    const apiKey = Deno.env.get('OPENWEATHERMAP_API_KEY');
+    // NOTE: trimming avoids common copy/paste issues with trailing spaces/newlines
+    const apiKey = (Deno.env.get('OPENWEATHERMAP_API_KEY') ?? '').trim();
     if (!apiKey) {
       console.error('OPENWEATHERMAP_API_KEY not configured');
       return new Response(
@@ -40,6 +41,17 @@ serve(async (req) => {
 
     if (!weatherResponse.ok) {
       console.error('OpenWeatherMap API error:', weatherData);
+
+      if (weatherResponse.status === 401) {
+        return new Response(
+          JSON.stringify({
+            error:
+              'Weather API key is invalid or not activated yet. Please verify the key and wait up to ~2 hours after creating it.',
+          }),
+          { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
+      }
+
       return new Response(
         JSON.stringify({ error: 'Failed to fetch weather data' }),
         { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
@@ -51,7 +63,12 @@ serve(async (req) => {
     const geoResponse = await fetch(geoUrl);
     const geoData = await geoResponse.json();
 
-    const locationName = geoData?.[0] 
+    if (!geoResponse.ok) {
+      console.error('OpenWeatherMap Geo API error:', geoData);
+      // Don't fail the whole request if reverse geocode fails.
+    }
+
+    const locationName = geoResponse.ok && geoData?.[0]
       ? `${geoData[0].name}, ${geoData[0].state || geoData[0].country}`
       : 'Unknown Location';
 
