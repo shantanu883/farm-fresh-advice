@@ -2,6 +2,15 @@ import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { toast } from 'sonner';
+import type { ForecastDay } from './useWeather';
+
+export interface DayPlan {
+  day: number;
+  dayName: string;
+  activity: string;
+  reason: string;
+  riskLevel: 'low' | 'medium' | 'high';
+}
 
 export interface Advisory {
   mainAdvice: string;
@@ -9,6 +18,7 @@ export interface Advisory {
   tips: string[];
   irrigationAdvice: string;
   fertilizerAdvice: string;
+  threeDayPlan?: DayPlan[];
 }
 
 export interface WeatherInput {
@@ -29,7 +39,7 @@ interface UseAdvisoryReturn {
   advisory: Advisory | null;
   isLoading: boolean;
   error: string | null;
-  generateAdvisory: (weather: WeatherInput, farm?: FarmInput) => Promise<void>;
+  generateAdvisory: (weather: WeatherInput, farm?: FarmInput, forecast?: ForecastDay[]) => Promise<void>;
 }
 
 export const useAdvisory = (): UseAdvisoryReturn => {
@@ -38,13 +48,13 @@ export const useAdvisory = (): UseAdvisoryReturn => {
   const [error, setError] = useState<string | null>(null);
   const { language } = useLanguage();
 
-  const generateAdvisory = useCallback(async (weather: WeatherInput, farm?: FarmInput) => {
+  const generateAdvisory = useCallback(async (weather: WeatherInput, farm?: FarmInput, forecast?: ForecastDay[]) => {
     setIsLoading(true);
     setError(null);
 
     try {
       const { data, error: fnError } = await supabase.functions.invoke('generate-advisory', {
-        body: { weather, farm, language }
+        body: { weather, forecast, farm, language }
       });
 
       if (fnError) {
