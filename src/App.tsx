@@ -12,6 +12,7 @@ import CropSoilSelection from "./pages/CropSoilSelection";
 import Advisory from "./pages/Advisory";
 import CropCalendar from "./pages/CropCalendar";
 import Settings from "./pages/Settings";
+import Farms from "./pages/Farms";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
@@ -76,6 +77,7 @@ const AppRoutes = () => {
       <Route path="/crop-selection" element={<ProtectedRoute><CropSoilSelection /></ProtectedRoute>} />
       <Route path="/advisory" element={<ProtectedRoute><Advisory /></ProtectedRoute>} />
       <Route path="/crop-calendar" element={<ProtectedRoute><CropCalendar /></ProtectedRoute>} />
+      <Route path="/farms" element={<ProtectedRoute><Farms /></ProtectedRoute>} />
       <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
       {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       <Route path="*" element={<NotFound />} />
