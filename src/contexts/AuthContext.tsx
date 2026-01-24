@@ -18,6 +18,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Check if user has a profile in the database
+  const checkUserProfile = async (userId: string) => {
+    try {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('user_id', userId)
+        .maybeSingle();
+      
+      if (profile) {
+        // User has a profile, mark onboarding as complete
+        localStorage.setItem('onboardingComplete', 'true');
+      }
+    } catch (error) {
+      console.error('Error checking profile:', error);
+    }
+  };
+
   useEffect(() => {
     // Set up auth state listener FIRST
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -25,6 +43,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
+        
+        // Check for existing profile after sign in
+        if (session?.user && (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED')) {
+          setTimeout(() => {
+            checkUserProfile(session.user.id);
+          }, 0);
+        }
       }
     );
 
@@ -32,6 +57,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
+      
+      // Also check profile on initial load
+      if (session?.user) {
+        checkUserProfile(session.user.id);
+      }
+      
       setLoading(false);
     });
 
