@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { Sprout, Mail, Lock, AlertCircle } from "lucide-react";
+import { Sprout, Mail, Lock, AlertCircle, ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { z } from "zod";
@@ -21,6 +21,8 @@ const Auth = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   // Redirect if already logged in
   useEffect(() => {
@@ -52,6 +54,12 @@ const Auth = () => {
         setError(e.errors[0].message);
         return false;
       }
+    }
+
+    // Check password confirmation for signup
+    if (!isLogin && password !== confirmPassword) {
+      setError(t("passwordsDoNotMatch"));
+      return false;
     }
     
     return true;
@@ -102,6 +110,16 @@ const Auth = () => {
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
+      {/* Back Button */}
+      <div className="absolute left-4 top-4 z-10">
+        <button
+          onClick={() => navigate("/welcome")}
+          className="flex h-10 w-10 items-center justify-center rounded-full bg-muted/80 text-foreground transition-colors hover:bg-muted"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </button>
+      </div>
+
       {/* Header */}
       <div className="flex flex-1 flex-col items-center justify-center px-6 py-12">
         {/* Logo */}
@@ -143,15 +161,42 @@ const Auth = () => {
                   <Lock className="h-4 w-4 text-primary" />
                   {t("password")}
                 </Label>
-                <Input
-                  type="password"
-                  placeholder={t("enterPassword")}
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="h-12 text-farmer-base"
-                  disabled={isSubmitting}
-                />
+                <div className="relative">
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder={t("enterPassword")}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="h-12 pr-12 text-farmer-base"
+                    disabled={isSubmitting}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  >
+                    {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  </button>
+                </div>
               </div>
+
+              {/* Confirm Password (Sign up only) */}
+              {!isLogin && (
+                <div className="space-y-2">
+                  <Label className="flex items-center gap-2 text-farmer-base">
+                    <Lock className="h-4 w-4 text-primary" />
+                    {t("confirmPassword")}
+                  </Label>
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder={t("reEnterPassword")}
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    className="h-12 text-farmer-base"
+                    disabled={isSubmitting}
+                  />
+                </div>
+              )}
 
               {/* Error Message */}
               {error && (
