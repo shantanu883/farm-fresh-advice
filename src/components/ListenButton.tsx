@@ -6,9 +6,10 @@ import { useLanguage } from "@/contexts/LanguageContext";
 interface ListenButtonProps {
   text: string;
   className?: string;
+  compact?: boolean;
 }
 
-const ListenButton = ({ text, className }: ListenButtonProps) => {
+const ListenButton = ({ text, className, compact = false }: ListenButtonProps) => {
   const { language, t } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -76,6 +77,27 @@ const ListenButton = ({ text, className }: ListenButtonProps) => {
       setIsLoading(false);
     }
   };
+
+  if (compact) {
+    return (
+      <Button
+        variant="default"
+        size="icon"
+        onClick={handleListen}
+        disabled={isLoading || !text}
+        className={`h-12 w-12 rounded-full shadow-lg ${className}`}
+        aria-label={isPlaying ? t("stopListening") : t("listenToAdvice")}
+      >
+        {isLoading ? (
+          <Loader2 className="h-5 w-5 animate-spin" />
+        ) : isPlaying ? (
+          <VolumeX className="h-5 w-5" />
+        ) : (
+          <Volume2 className="h-5 w-5" />
+        )}
+      </Button>
+    );
+  }
 
   return (
     <Button
