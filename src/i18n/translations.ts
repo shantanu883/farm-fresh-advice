@@ -153,6 +153,11 @@ export const translations = {
     enableAlerts: "Enable Weather Alerts",
     notificationsDenied: "Notifications are blocked. Please enable them in your browser settings.",
     dismiss: "Dismiss",
+
+    // Pest Alerts
+    pestAlerts: "Pest & Disease Alerts",
+    pestAlertsSubtitle: "Based on current weather conditions",
+    preventiveMeasures: "Preventive Measures",
   },
 
   hi: {
@@ -309,6 +314,11 @@ export const translations = {
     enableAlerts: "मौसम अलर्ट सक्षम करें",
     notificationsDenied: "सूचनाएं अवरुद्ध हैं। कृपया अपनी ब्राउज़र सेटिंग्स में उन्हें सक्षम करें।",
     dismiss: "खारिज करें",
+
+    // Pest Alerts
+    pestAlerts: "कीट और रोग अलर्ट",
+    pestAlertsSubtitle: "वर्तमान मौसम परिस्थितियों के आधार पर",
+    preventiveMeasures: "निवारक उपाय",
   },
 
   mr: {
@@ -465,6 +475,11 @@ export const translations = {
     enableAlerts: "हवामान अलर्ट सक्षम करा",
     notificationsDenied: "सूचना अवरोधित आहेत. कृपया तुमच्या ब्राउझर सेटिंग्जमध्ये त्या सक्षम करा.",
     dismiss: "डिसमिस करा",
+
+    // Pest Alerts
+    pestAlerts: "कीटक आणि रोग अलर्ट",
+    pestAlertsSubtitle: "सध्याच्या हवामान परिस्थितीवर आधारित",
+    preventiveMeasures: "प्रतिबंधात्मक उपाय",
   },
 } as const;
 

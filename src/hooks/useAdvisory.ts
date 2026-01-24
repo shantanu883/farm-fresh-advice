@@ -12,6 +12,13 @@ export interface DayPlan {
   riskLevel: 'low' | 'medium' | 'high';
 }
 
+export interface PestAlert {
+  pest: string;
+  risk: 'low' | 'medium' | 'high';
+  conditions: string;
+  prevention: string[];
+}
+
 export interface Advisory {
   mainAdvice: string;
   riskLevel: 'low' | 'medium' | 'high';
@@ -19,6 +26,7 @@ export interface Advisory {
   irrigationAdvice: string;
   fertilizerAdvice: string;
   threeDayPlan?: DayPlan[];
+  pestAlerts?: PestAlert[];
 }
 
 export interface WeatherInput {

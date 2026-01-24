@@ -3,6 +3,7 @@ import WeatherCard from "@/components/WeatherCard";
 import AdvisoryCard from "@/components/AdvisoryCard";
 import ForecastCard from "@/components/ForecastCard";
 import ThreeDayPlanCard from "@/components/ThreeDayPlanCard";
+import PestAlertCard from "@/components/PestAlertCard";
 import AlertBanner from "@/components/AlertBanner";
 import WeatherAlertBanner from "@/components/WeatherAlertBanner";
 import BottomNavigation from "@/components/BottomNavigation";
@@ -212,6 +213,13 @@ const Advisory = () => {
       {advisory?.threeDayPlan && advisory.threeDayPlan.length > 0 && (
         <div className="mb-6">
           <ThreeDayPlanCard plan={advisory.threeDayPlan} />
+        </div>
+      )}
+
+      {/* Pest & Disease Alerts */}
+      {advisory?.pestAlerts && advisory.pestAlerts.length > 0 && (
+        <div className="mb-6">
+          <PestAlertCard alerts={advisory.pestAlerts} />
         </div>
       )}
 
