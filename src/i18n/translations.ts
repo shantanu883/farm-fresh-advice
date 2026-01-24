@@ -62,6 +62,14 @@ export const translations = {
     // Home Screen
     getTodaysAdvice: "Get Today's Advice",
     weatherPoweredGuidance: "Weather-powered guidance",
+    goodMorning: "Good morning",
+    goodAfternoon: "Good afternoon",
+    goodEvening: "Good evening",
+    farmer: "Farmer",
+    yourCrops: "Your Crops",
+    viewAll: "View All",
+    cropsLabel: "crops",
+    quickActions: "Quick Actions",
 
     // Navigation
     home: "Home",
@@ -223,6 +231,14 @@ export const translations = {
     // Home Screen
     getTodaysAdvice: "आज की सलाह प्राप्त करें",
     weatherPoweredGuidance: "मौसम आधारित मार्गदर्शन",
+    goodMorning: "सुप्रभात",
+    goodAfternoon: "नमस्ते",
+    goodEvening: "शुभ संध्या",
+    farmer: "किसान",
+    yourCrops: "आपकी फसलें",
+    viewAll: "सभी देखें",
+    cropsLabel: "फसलें",
+    quickActions: "त्वरित कार्य",
 
     // Navigation
     home: "होम",
@@ -384,6 +400,14 @@ export const translations = {
     // Home Screen
     getTodaysAdvice: "आजचा सल्ला मिळवा",
     weatherPoweredGuidance: "हवामान-आधारित मार्गदर्शन",
+    goodMorning: "सुप्रभात",
+    goodAfternoon: "नमस्कार",
+    goodEvening: "शुभ संध्याकाळ",
+    farmer: "शेतकरी",
+    yourCrops: "तुमची पिके",
+    viewAll: "सर्व पहा",
+    cropsLabel: "पिके",
+    quickActions: "जलद कृती",
 
     // Navigation
     home: "होम",
