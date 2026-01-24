@@ -144,12 +144,63 @@ const Onboarding = () => {
             />
             <button
               type="button"
-              onClick={() => {
+              onClick={async () => {
+                if (!navigator.geolocation) {
+                  toast.error("Geolocation is not supported by your browser");
+                  return;
+                }
+                
                 setIsGPSLoading(true);
-                setTimeout(() => {
-                  setProfile({ ...profile, location: "Hyderabad, Telangana" });
-                  setIsGPSLoading(false);
-                }, 1500);
+                
+                navigator.geolocation.getCurrentPosition(
+                  async (position) => {
+                    try {
+                      const { latitude, longitude } = position.coords;
+                      
+                      // Reverse geocode using OpenStreetMap Nominatim (free, no API key needed)
+                      const response = await fetch(
+                        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10`
+                      );
+                      
+                      if (response.ok) {
+                        const data = await response.json();
+                        const address = data.address || {};
+                        const city = address.city || address.town || address.village || address.county || "";
+                        const state = address.state || "";
+                        const locationString = [city, state].filter(Boolean).join(", ");
+                        
+                        setProfile({ ...profile, location: locationString || `${latitude.toFixed(4)}, ${longitude.toFixed(4)}` });
+                        
+                        // Also cache for weather
+                        localStorage.setItem('userGeoLocation', JSON.stringify({ lat: latitude, lon: longitude }));
+                      } else {
+                        setProfile({ ...profile, location: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}` });
+                      }
+                    } catch (error) {
+                      console.error("Geocoding error:", error);
+                      toast.error("Could not get location name");
+                    } finally {
+                      setIsGPSLoading(false);
+                    }
+                  },
+                  (error) => {
+                    setIsGPSLoading(false);
+                    if (error.code === error.PERMISSION_DENIED) {
+                      toast.error("Location permission denied. Please enable location access.");
+                    } else if (error.code === error.POSITION_UNAVAILABLE) {
+                      toast.error("Location information is unavailable.");
+                    } else if (error.code === error.TIMEOUT) {
+                      toast.error("Location request timed out.");
+                    } else {
+                      toast.error("Unable to get your location");
+                    }
+                  },
+                  {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 300000,
+                  }
+                );
               }}
               disabled={isGPSLoading}
               className="flex items-center gap-2 text-farmer-sm text-primary hover:underline"
