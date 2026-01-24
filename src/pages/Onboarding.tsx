@@ -12,14 +12,20 @@ import {
 } from "@/components/ui/select";
 import { User, MapPin, Calendar, Info, Tractor, Navigation } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { Farm, FarmerProfile } from "@/types/farm";
+import { useFarmerProfile } from "@/hooks/useFarmerProfile";
 import FarmCard from "@/components/FarmCard";
 import AddFarmDialog from "@/components/AddFarmDialog";
+import { toast } from "sonner";
 
 const Onboarding = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
+  const { user } = useAuth();
+  const { saveProfile } = useFarmerProfile();
   const [isGPSLoading, setIsGPSLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   
   const [profile, setProfile] = useState<FarmerProfile>({
     name: "",
@@ -69,10 +75,28 @@ const Onboarding = () => {
     });
   };
 
-  const handleSave = () => {
-    localStorage.setItem("farmerProfile", JSON.stringify(profile));
-    localStorage.setItem("onboardingComplete", "true");
-    navigate("/");
+  const handleSave = async () => {
+    if (!user) {
+      toast.error("Please login first");
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const { error } = await saveProfile(profile);
+      if (error) {
+        toast.error("Failed to save profile. Please try again.");
+        console.error("Save error:", error);
+      } else {
+        toast.success("Profile saved successfully!");
+        navigate("/");
+      }
+    } catch (err) {
+      toast.error("An unexpected error occurred");
+      console.error("Save error:", err);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const isFormValid = profile.location && profile.farms.length > 0 && profile.farmingSeason;
@@ -226,10 +250,10 @@ const Onboarding = () => {
           variant="hero"
           size="xl"
           onClick={handleSave}
-          disabled={!isFormValid}
+          disabled={!isFormValid || isSaving}
           className="w-full"
         >
-          {t("saveAndContinue")}
+          {isSaving ? t("pleaseWait") : t("saveAndContinue")}
         </Button>
       </div>
     </div>

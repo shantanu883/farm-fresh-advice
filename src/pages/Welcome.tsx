@@ -16,7 +16,7 @@ const Welcome = () => {
 
   const handleLanguageSelect = (langCode: Language) => {
     setLanguage(langCode);
-    navigate("/onboarding");
+    navigate("/auth");
   };
 
   return (

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { 
@@ -14,24 +14,13 @@ import {
   Settings
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { FarmerProfile } from "@/types/farm";
+import { useFarmerProfile } from "@/hooks/useFarmerProfile";
 import BottomNavigation from "@/components/BottomNavigation";
 
 const Home = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
-  const [profile, setProfile] = useState<FarmerProfile | null>(null);
-
-  useEffect(() => {
-    const saved = localStorage.getItem('farmerProfile');
-    if (saved) {
-      try {
-        setProfile(JSON.parse(saved));
-      } catch (e) {
-        console.error('Error parsing farmer profile:', e);
-      }
-    }
-  }, []);
+  const { profile, loading: profileLoading } = useFarmerProfile();
 
   // Get all unique crops from all farms
   const allCrops = profile?.farms.flatMap(farm => farm.crops) || [];
