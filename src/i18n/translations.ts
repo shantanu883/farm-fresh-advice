@@ -184,6 +184,9 @@ export const translations = {
     logout: "Logout",
     loggingOut: "Logging out...",
     account: "Account",
+    loading: "Loading...",
+    stopListening: "Stop",
+    listenToAdvice: "Listen to Advice",
   },
 
   hi: {
@@ -371,6 +374,9 @@ export const translations = {
     logout: "लॉगआउट",
     loggingOut: "लॉगआउट हो रहा है...",
     account: "खाता",
+    loading: "लोड हो रहा है...",
+    stopListening: "रोकें",
+    listenToAdvice: "सलाह सुनें",
   },
 
   mr: {
@@ -558,6 +564,9 @@ export const translations = {
     logout: "लॉगआउट",
     loggingOut: "लॉगआउट होत आहे...",
     account: "खाते",
+    loading: "लोड होत आहे...",
+    stopListening: "थांबा",
+    listenToAdvice: "सल्ला ऐका",
   },
 } as const;
 

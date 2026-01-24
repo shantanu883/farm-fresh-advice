@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Sprout, Globe } from "lucide-react";
+import { Sprout, Globe, ChevronRight } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Language } from "@/i18n/translations";
 
@@ -12,10 +12,13 @@ const languages: { code: Language; label: string; native: string }[] = [
 
 const Welcome = () => {
   const navigate = useNavigate();
-  const { setLanguage, t } = useLanguage();
+  const { language, setLanguage, t } = useLanguage();
 
   const handleLanguageSelect = (langCode: Language) => {
     setLanguage(langCode);
+  };
+
+  const handleContinue = () => {
     navigate("/auth");
   };
 
@@ -32,22 +35,22 @@ const Welcome = () => {
         {/* Content */}
         <div className="relative z-10 flex flex-col items-center text-center">
           {/* Logo */}
-          <div className="mb-8 flex h-28 w-28 items-center justify-center rounded-3xl bg-primary shadow-elevated">
-            <Sprout className="h-14 w-14 text-primary-foreground" />
+          <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-3xl bg-primary shadow-elevated">
+            <Sprout className="h-12 w-12 text-primary-foreground" />
           </div>
 
           {/* Title */}
-          <h1 className="mb-3 text-farmer-3xl font-bold text-foreground">
+          <h1 className="mb-2 text-farmer-2xl font-bold text-foreground">
             {t("appName")}
           </h1>
 
           {/* Tagline */}
-          <p className="mb-10 max-w-xs text-farmer-lg text-muted-foreground">
+          <p className="mb-8 max-w-xs text-farmer-base text-muted-foreground">
             {t("tagline")}
           </p>
 
           {/* Language Selection */}
-          <div className="mb-6 flex items-center gap-2 text-muted-foreground">
+          <div className="mb-4 flex items-center gap-2 text-muted-foreground">
             <Globe className="h-5 w-5" />
             <span className="text-farmer-base font-medium">{t("selectLanguage")}</span>
           </div>
@@ -57,10 +60,14 @@ const Welcome = () => {
             {languages.map((lang) => (
               <Button
                 key={lang.code}
-                variant="secondary"
+                variant={language === lang.code ? "default" : "outline"}
                 size="xl"
                 onClick={() => handleLanguageSelect(lang.code)}
-                className="w-full justify-center gap-3 border-2 border-border"
+                className={`w-full justify-between ${
+                  language === lang.code 
+                    ? "border-2 border-primary" 
+                    : "border-2 border-border"
+                }`}
               >
                 <span className="text-farmer-lg">{lang.native}</span>
                 {lang.code !== "en" && (
@@ -69,6 +76,17 @@ const Welcome = () => {
               </Button>
             ))}
           </div>
+
+          {/* Continue Button */}
+          <Button
+            variant="hero"
+            size="xl"
+            onClick={handleContinue}
+            className="mt-8 w-full max-w-xs"
+          >
+            {t("continue")}
+            <ChevronRight className="ml-2 h-5 w-5" />
+          </Button>
         </div>
       </div>
 
