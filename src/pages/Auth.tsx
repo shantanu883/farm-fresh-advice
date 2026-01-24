@@ -25,7 +25,13 @@ const Auth = () => {
   // Redirect if already logged in
   useEffect(() => {
     if (user && !loading) {
-      navigate("/");
+      // Check if onboarding is complete
+      const isOnboardingComplete = localStorage.getItem("onboardingComplete") === "true";
+      if (isOnboardingComplete) {
+        navigate("/");
+      } else {
+        navigate("/onboarding");
+      }
     }
   }, [user, loading, navigate]);
 
