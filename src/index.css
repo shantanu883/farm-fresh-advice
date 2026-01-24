@@ -2,110 +2,127 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Smart Crop Advisory - Farmer-Friendly Design System */
+/* Smart Crop Advisory - Premium Farmer-Friendly Design System */
 /* Earthy, nature-inspired palette with high contrast for outdoor visibility */
 
 @layer base {
   :root {
     /* Core backgrounds - warm cream for outdoor readability */
-    --background: 45 30% 97%;
-    --foreground: 145 30% 15%;
+    --background: 48 35% 96%;
+    --foreground: 150 25% 12%;
 
-    /* Cards - soft white with subtle warmth */
-    --card: 45 40% 99%;
-    --card-foreground: 145 30% 15%;
+    /* Cards - soft white with warmth */
+    --card: 48 50% 99%;
+    --card-foreground: 150 25% 12%;
 
-    --popover: 45 40% 99%;
-    --popover-foreground: 145 30% 15%;
+    --popover: 48 50% 99%;
+    --popover-foreground: 150 25% 12%;
 
-    /* Primary - Forest Green (agriculture, growth) */
-    --primary: 145 45% 32%;
-    --primary-foreground: 45 30% 98%;
+    /* Primary - Rich Forest Green (agriculture, growth) */
+    --primary: 152 55% 28%;
+    --primary-foreground: 48 100% 98%;
 
     /* Secondary - Sky Blue (weather, trust) */
-    --secondary: 200 70% 50%;
-    --secondary-foreground: 200 100% 98%;
+    --secondary: 205 85% 48%;
+    --secondary-foreground: 205 100% 98%;
 
     /* Muted - Soft sage */
-    --muted: 145 15% 90%;
-    --muted-foreground: 145 15% 45%;
+    --muted: 150 12% 88%;
+    --muted-foreground: 150 10% 42%;
 
     /* Accent - Warm Amber (sun, harvest) */
-    --accent: 38 92% 50%;
-    --accent-foreground: 38 100% 15%;
+    --accent: 40 95% 52%;
+    --accent-foreground: 40 100% 12%;
+
+    /* Warning - Soft amber */
+    --warning: 38 92% 50%;
+    --warning-foreground: 38 100% 15%;
 
     /* Destructive - Alert Red */
-    --destructive: 0 72% 51%;
+    --destructive: 0 75% 55%;
     --destructive-foreground: 0 0% 100%;
 
     /* Risk Colors */
-    --risk-low: 145 60% 42%;
-    --risk-medium: 38 92% 50%;
-    --risk-high: 0 72% 51%;
+    --risk-low: 152 65% 38%;
+    --risk-medium: 40 95% 52%;
+    --risk-high: 0 75% 55%;
 
     /* Weather Colors */
-    --weather-temp: 15 80% 55%;
-    --weather-humidity: 200 70% 50%;
-    --weather-rain: 210 90% 55%;
+    --weather-sunny: 40 95% 52%;
+    --weather-temp: 18 85% 55%;
+    --weather-humidity: 205 85% 48%;
+    --weather-rain: 215 90% 52%;
+    --weather-wind: 170 50% 45%;
 
     /* Borders & Inputs */
-    --border: 145 20% 85%;
-    --input: 145 20% 92%;
-    --ring: 145 45% 32%;
+    --border: 150 18% 82%;
+    --input: 150 18% 90%;
+    --ring: 152 55% 28%;
 
     --radius: 1rem;
 
-    /* Sidebar (not used but required) */
-    --sidebar-background: 45 30% 97%;
-    --sidebar-foreground: 145 30% 15%;
-    --sidebar-primary: 145 45% 32%;
-    --sidebar-primary-foreground: 45 30% 98%;
-    --sidebar-accent: 38 92% 50%;
-    --sidebar-accent-foreground: 38 100% 15%;
-    --sidebar-border: 145 20% 85%;
-    --sidebar-ring: 145 45% 32%;
+    /* Sidebar */
+    --sidebar-background: 48 35% 96%;
+    --sidebar-foreground: 150 25% 12%;
+    --sidebar-primary: 152 55% 28%;
+    --sidebar-primary-foreground: 48 100% 98%;
+    --sidebar-accent: 40 95% 52%;
+    --sidebar-accent-foreground: 40 100% 12%;
+    --sidebar-border: 150 18% 82%;
+    --sidebar-ring: 152 55% 28%;
 
     /* Custom Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(145 45% 32%), hsl(145 50% 25%));
-    --gradient-secondary: linear-gradient(135deg, hsl(200 70% 50%), hsl(200 80% 40%));
-    --gradient-accent: linear-gradient(135deg, hsl(38 92% 50%), hsl(28 90% 45%));
-    --gradient-hero: linear-gradient(180deg, hsl(145 40% 25%), hsl(145 45% 32%));
-    --gradient-sky: linear-gradient(180deg, hsl(200 80% 55%), hsl(200 70% 70%));
+    --gradient-primary: linear-gradient(145deg, hsl(152 55% 28%), hsl(152 60% 22%));
+    --gradient-secondary: linear-gradient(145deg, hsl(205 85% 48%), hsl(205 90% 38%));
+    --gradient-accent: linear-gradient(145deg, hsl(40 95% 52%), hsl(32 90% 48%));
+    --gradient-hero: linear-gradient(180deg, hsl(152 50% 22%) 0%, hsl(152 55% 28%) 100%);
+    --gradient-sky: linear-gradient(180deg, hsl(205 85% 52%) 0%, hsl(205 75% 65%) 100%);
+    --gradient-sunrise: linear-gradient(135deg, hsl(40 95% 52%) 0%, hsl(18 85% 55%) 50%, hsl(152 55% 28%) 100%);
     
-    /* Shadows */
-    --shadow-card: 0 4px 20px -4px hsl(145 30% 15% / 0.1);
-    --shadow-button: 0 4px 14px -4px hsl(145 45% 32% / 0.4);
-    --shadow-elevated: 0 8px 30px -8px hsl(145 30% 15% / 0.15);
+    /* Premium Shadows */
+    --shadow-xs: 0 1px 2px hsl(150 25% 12% / 0.05);
+    --shadow-sm: 0 2px 8px -2px hsl(150 25% 12% / 0.08);
+    --shadow-card: 0 4px 24px -6px hsl(150 25% 12% / 0.12);
+    --shadow-button: 0 4px 16px -4px hsl(152 55% 28% / 0.35);
+    --shadow-elevated: 0 12px 40px -12px hsl(150 25% 12% / 0.18);
+    --shadow-glow-primary: 0 0 24px -4px hsl(152 55% 28% / 0.4);
+    --shadow-glow-accent: 0 0 24px -4px hsl(40 95% 52% / 0.4);
   }
 
   .dark {
-    --background: 145 25% 10%;
-    --foreground: 45 30% 95%;
+    --background: 150 22% 8%;
+    --foreground: 48 30% 94%;
 
-    --card: 145 20% 15%;
-    --card-foreground: 45 30% 95%;
+    --card: 150 18% 12%;
+    --card-foreground: 48 30% 94%;
 
-    --popover: 145 20% 15%;
-    --popover-foreground: 45 30% 95%;
+    --popover: 150 18% 12%;
+    --popover-foreground: 48 30% 94%;
 
-    --primary: 145 50% 45%;
-    --primary-foreground: 145 30% 10%;
+    --primary: 152 55% 42%;
+    --primary-foreground: 150 30% 8%;
 
-    --secondary: 200 60% 45%;
-    --secondary-foreground: 200 100% 98%;
+    --secondary: 205 70% 50%;
+    --secondary-foreground: 205 100% 98%;
 
-    --muted: 145 15% 25%;
-    --muted-foreground: 145 10% 65%;
+    --muted: 150 12% 20%;
+    --muted-foreground: 150 8% 58%;
 
-    --accent: 38 85% 55%;
-    --accent-foreground: 38 100% 10%;
+    --accent: 40 88% 55%;
+    --accent-foreground: 40 100% 8%;
 
-    --destructive: 0 65% 45%;
+    --warning: 38 85% 55%;
+    --warning-foreground: 38 100% 10%;
+
+    --destructive: 0 68% 48%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 145 15% 25%;
-    --input: 145 15% 20%;
-    --ring: 145 50% 45%;
+    --border: 150 12% 22%;
+    --input: 150 12% 18%;
+    --ring: 152 55% 42%;
+
+    --shadow-card: 0 4px 24px -6px hsl(0 0% 0% / 0.4);
+    --shadow-elevated: 0 12px 40px -12px hsl(0 0% 0% / 0.5);
   }
 }
 
@@ -114,11 +131,16 @@
     @apply border-border;
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
 
   /* Large touch targets for farmers */
@@ -126,15 +148,29 @@
   [role="button"],
   a {
     min-height: 44px;
-    min-width: 44px;
   }
+
+  /* Improved typography scale */
+  .text-farmer-xs { @apply text-xs leading-relaxed; }
+  .text-farmer-sm { @apply text-sm leading-relaxed; }
+  .text-farmer-base { @apply text-base leading-relaxed; }
+  .text-farmer-lg { @apply text-lg leading-snug; }
+  .text-farmer-xl { @apply text-xl leading-snug font-semibold; }
+  .text-farmer-2xl { @apply text-2xl leading-tight font-bold; }
+  .text-farmer-3xl { @apply text-3xl leading-tight font-bold; }
 }
 
 @layer components {
-  /* Hero text styles */
-  .text-hero {
-    @apply text-3xl font-bold tracking-tight;
+  /* Hero gradient text */
+  .text-gradient-primary {
     background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-accent {
+    background: var(--gradient-accent);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -142,37 +178,94 @@
 
   /* Weather card gradient backgrounds */
   .bg-weather-temp {
-    background: linear-gradient(135deg, hsl(var(--weather-temp)), hsl(15 75% 60%));
+    background: linear-gradient(145deg, hsl(var(--weather-temp)), hsl(18 80% 60%));
   }
 
   .bg-weather-humidity {
-    background: linear-gradient(135deg, hsl(var(--weather-humidity)), hsl(200 65% 55%));
+    background: linear-gradient(145deg, hsl(var(--weather-humidity)), hsl(205 80% 55%));
   }
 
   .bg-weather-rain {
-    background: linear-gradient(135deg, hsl(var(--weather-rain)), hsl(210 85% 60%));
+    background: linear-gradient(145deg, hsl(var(--weather-rain)), hsl(215 85% 58%));
   }
 
-  /* Risk badge styles */
+  .bg-weather-sunny {
+    background: linear-gradient(145deg, hsl(var(--weather-sunny)), hsl(32 90% 50%));
+  }
+
+  .bg-weather-wind {
+    background: linear-gradient(145deg, hsl(var(--weather-wind)), hsl(170 45% 50%));
+  }
+
+  /* Risk badge styles with gradients */
   .risk-low {
-    @apply bg-green-100 text-green-800 border-green-200;
+    @apply bg-gradient-to-r from-green-100 to-green-50 text-green-800 border-green-200/60;
   }
 
   .risk-medium {
-    @apply bg-amber-100 text-amber-800 border-amber-200;
+    @apply bg-gradient-to-r from-amber-100 to-amber-50 text-amber-800 border-amber-200/60;
   }
 
   .risk-high {
-    @apply bg-red-100 text-red-800 border-red-200;
+    @apply bg-gradient-to-r from-red-100 to-red-50 text-red-800 border-red-200/60;
   }
 
-  /* Card elevation */
+  /* Card styles */
   .card-elevated {
     box-shadow: var(--shadow-card);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
   }
 
   .card-elevated:hover {
     box-shadow: var(--shadow-elevated);
+  }
+
+  .card-interactive {
+    box-shadow: var(--shadow-card);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card-interactive:hover {
+    box-shadow: var(--shadow-elevated);
+    transform: translateY(-2px);
+  }
+
+  .card-interactive:active {
+    transform: translateY(0);
+  }
+
+  /* Glass effect */
+  .glass {
+    background: hsl(var(--card) / 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .glass-strong {
+    background: hsl(var(--card) / 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  /* Button glow effects */
+  .btn-glow-primary {
+    box-shadow: var(--shadow-button);
+    transition: all 0.3s ease;
+  }
+
+  .btn-glow-primary:hover {
+    box-shadow: var(--shadow-glow-primary);
+    transform: translateY(-1px);
+  }
+
+  .btn-glow-accent {
+    box-shadow: 0 4px 16px -4px hsl(40 95% 52% / 0.35);
+    transition: all 0.3s ease;
+  }
+
+  .btn-glow-accent:hover {
+    box-shadow: var(--shadow-glow-accent);
+    transform: translateY(-1px);
   }
 
   /* Bottom nav safe area */
@@ -182,7 +275,62 @@
 
   /* Page container with bottom nav spacing */
   .page-container {
-    @apply min-h-screen pb-24 px-4 pt-6;
+    @apply min-h-screen pb-28 px-4 pt-6;
+  }
+
+  /* Animated gradient background */
+  .bg-animated-gradient {
+    background: linear-gradient(-45deg, 
+      hsl(152 55% 28%), 
+      hsl(152 50% 35%), 
+      hsl(205 85% 48%), 
+      hsl(40 95% 52%)
+    );
+    background-size: 400% 400%;
+    animation: gradient-shift 15s ease infinite;
+  }
+
+  @keyframes gradient-shift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Pulse animation for alerts */
+  .pulse-ring {
+    animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  @keyframes pulse-ring {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  /* Smooth icon animation */
+  .icon-bounce {
+    animation: icon-bounce 0.5s ease;
+  }
+
+  @keyframes icon-bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+  }
+
+  /* Skeleton shimmer */
+  .skeleton-shimmer {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--muted)) 0%,
+      hsl(var(--muted) / 0.5) 50%,
+      hsl(var(--muted)) 100%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
   }
 }
 
@@ -190,5 +338,16 @@
 @media (display-mode: standalone) {
   body {
     padding-top: env(safe-area-inset-top);
+  }
+
+  .page-container {
+    padding-top: calc(1.5rem + env(safe-area-inset-top));
+  }
+}
+
+/* Smooth scrolling for touch */
+@supports (-webkit-overflow-scrolling: touch) {
+  .scroll-smooth {
+    -webkit-overflow-scrolling: touch;
   }
 }
