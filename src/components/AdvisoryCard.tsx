@@ -4,6 +4,7 @@ import { Lightbulb, Droplets, Leaf, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Skeleton } from "@/components/ui/skeleton";
+import ListenButton from "./ListenButton";
 
 interface AdvisoryCardProps {
   advice: string;
@@ -65,9 +66,12 @@ const AdvisoryCard = ({
       </div>
       
       <div className="p-5">
-        <p className="mb-4 text-farmer-base leading-relaxed text-foreground">
-          {advice}
-        </p>
+        <div className="flex items-start justify-between gap-2 mb-4">
+          <p className="text-farmer-base leading-relaxed text-foreground flex-1">
+            {advice}
+          </p>
+          <ListenButton text={advice} compact className="shrink-0" />
+        </div>
         <RiskBadge level={riskLevel} />
 
         {/* Tips Section */}
@@ -95,22 +99,28 @@ const AdvisoryCard = ({
           <div className="mt-5 grid grid-cols-1 gap-3">
             {irrigationAdvice && (
               <div className="rounded-xl bg-primary/10 p-3">
-                <div className="flex items-center gap-2 mb-1">
-                  <Droplets className="h-4 w-4 text-primary" />
-                  <span className="text-farmer-sm font-semibold text-primary">
-                    {t("bestIrrigationTime")}
-                  </span>
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <div className="flex items-center gap-2">
+                    <Droplets className="h-4 w-4 text-primary" />
+                    <span className="text-farmer-sm font-semibold text-primary">
+                      {t("bestIrrigationTime")}
+                    </span>
+                  </div>
+                  <ListenButton text={irrigationAdvice} compact className="h-8 w-8" />
                 </div>
                 <p className="text-farmer-sm text-foreground">{irrigationAdvice}</p>
               </div>
             )}
             {fertilizerAdvice && (
               <div className="rounded-xl bg-accent/10 p-3">
-                <div className="flex items-center gap-2 mb-1">
-                  <Leaf className="h-4 w-4 text-accent" />
-                  <span className="text-farmer-sm font-semibold text-accent">
-                    {t("fertilizerTip")}
-                  </span>
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <div className="flex items-center gap-2">
+                    <Leaf className="h-4 w-4 text-accent" />
+                    <span className="text-farmer-sm font-semibold text-accent">
+                      {t("fertilizerTip")}
+                    </span>
+                  </div>
+                  <ListenButton text={fertilizerAdvice} compact className="h-8 w-8" />
                 </div>
                 <p className="text-farmer-sm text-foreground">{fertilizerAdvice}</p>
               </div>
