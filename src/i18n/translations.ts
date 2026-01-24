@@ -191,6 +191,18 @@ export const translations = {
     confirmPassword: "Confirm Password",
     reEnterPassword: "Re-enter your password",
     passwordsDoNotMatch: "Passwords do not match",
+    
+    // OTP Authentication
+    loginOrSignUp: "Login / Sign Up",
+    otpDescription: "We'll send you a one-time code to verify your email",
+    sendOtp: "Send OTP",
+    enterOtp: "Enter OTP",
+    otpSentTo: "We sent a 6-digit code to",
+    verifyAndLogin: "Verify & Login",
+    resendOtp: "Resend OTP",
+    resendOtpIn: "Resend OTP in",
+    enterValidOtp: "Please enter a valid 6-digit OTP",
+    otpExpiredOrInvalid: "OTP expired or invalid. Please request a new one.",
   },
 
   hi: {
@@ -385,6 +397,18 @@ export const translations = {
     confirmPassword: "पासवर्ड की पुष्टि करें",
     reEnterPassword: "पासवर्ड दोबारा दर्ज करें",
     passwordsDoNotMatch: "पासवर्ड मेल नहीं खाते",
+    
+    // OTP Authentication
+    loginOrSignUp: "लॉगिन / साइन अप",
+    otpDescription: "हम आपके ईमेल को सत्यापित करने के लिए एक कोड भेजेंगे",
+    sendOtp: "OTP भेजें",
+    enterOtp: "OTP दर्ज करें",
+    otpSentTo: "हमने 6 अंकों का कोड भेजा है",
+    verifyAndLogin: "सत्यापित करें और लॉगिन करें",
+    resendOtp: "OTP दोबारा भेजें",
+    resendOtpIn: "OTP दोबारा भेजें",
+    enterValidOtp: "कृपया एक वैध 6 अंकों का OTP दर्ज करें",
+    otpExpiredOrInvalid: "OTP समाप्त या अमान्य है। कृपया नया अनुरोध करें।",
   },
 
   mr: {
@@ -579,6 +603,18 @@ export const translations = {
     confirmPassword: "पासवर्डची पुष्टी करा",
     reEnterPassword: "पासवर्ड पुन्हा प्रविष्ट करा",
     passwordsDoNotMatch: "पासवर्ड जुळत नाहीत",
+    
+    // OTP Authentication
+    loginOrSignUp: "लॉगिन / साइन अप",
+    otpDescription: "आम्ही तुमचा ईमेल सत्यापित करण्यासाठी एक कोड पाठवू",
+    sendOtp: "OTP पाठवा",
+    enterOtp: "OTP प्रविष्ट करा",
+    otpSentTo: "आम्ही 6 अंकी कोड पाठवला आहे",
+    verifyAndLogin: "सत्यापित करा आणि लॉगिन करा",
+    resendOtp: "OTP पुन्हा पाठवा",
+    resendOtpIn: "OTP पुन्हा पाठवा",
+    enterValidOtp: "कृपया वैध 6 अंकी OTP प्रविष्ट करा",
+    otpExpiredOrInvalid: "OTP कालबाह्य किंवा अवैध आहे. कृपया नवीन विनंती करा.",
   },
 } as const;
 
