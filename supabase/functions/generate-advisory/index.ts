@@ -31,6 +31,158 @@ interface FarmData {
   season?: string;
 }
 
+interface PestAlert {
+  pest: string;
+  risk: 'low' | 'medium' | 'high';
+  conditions: string;
+  prevention: string[];
+}
+
+// Analyze weather conditions for pest/disease risks
+function analyzePestRisks(weather: WeatherData, forecast: ForecastDay[]): PestAlert[] {
+  const alerts: PestAlert[] = [];
+  const temp = weather.temperature;
+  const humidity = weather.humidity;
+  const rainfall = weather.rainfall;
+  
+  // Check forecast for prolonged conditions
+  const avgForecastHumidity = forecast.length > 0 
+    ? forecast.reduce((sum, d) => sum + d.humidity, 0) / forecast.length 
+    : humidity;
+  const totalForecastRain = forecast.reduce((sum, d) => sum + d.rainfall, 0);
+  const avgForecastTemp = forecast.length > 0
+    ? forecast.reduce((sum, d) => sum + d.temperature, 0) / forecast.length
+    : temp;
+
+  // Fungal diseases (Late blight, Early blight, Powdery mildew)
+  if (humidity > 80 && temp >= 18 && temp <= 28) {
+    alerts.push({
+      pest: 'Fungal Diseases (Blight/Mildew)',
+      risk: humidity > 90 ? 'high' : 'medium',
+      conditions: 'High humidity with warm temperatures favors fungal growth',
+      prevention: [
+        'Apply copper-based fungicide preventively',
+        'Ensure good air circulation between plants',
+        'Avoid overhead irrigation',
+        'Remove and destroy infected plant parts'
+      ]
+    });
+  }
+
+  // Aphids - warm, dry conditions
+  if (temp >= 25 && temp <= 35 && humidity < 60 && rainfall < 2) {
+    alerts.push({
+      pest: 'Aphids',
+      risk: temp > 30 && humidity < 50 ? 'high' : 'medium',
+      conditions: 'Warm, dry weather promotes rapid aphid reproduction',
+      prevention: [
+        'Spray neem oil solution (2-3ml/L)',
+        'Introduce ladybugs as natural predators',
+        'Use yellow sticky traps for monitoring',
+        'Spray strong water jet to dislodge aphids'
+      ]
+    });
+  }
+
+  // Spider mites - hot, dry conditions
+  if (temp >= 30 && humidity < 50 && rainfall < 1) {
+    alerts.push({
+      pest: 'Spider Mites',
+      risk: 'high',
+      conditions: 'Hot, dry conditions are ideal for spider mite outbreaks',
+      prevention: [
+        'Increase humidity around plants with misting',
+        'Apply sulfur-based miticide',
+        'Spray water on leaf undersides',
+        'Avoid dusty conditions near crops'
+      ]
+    });
+  }
+
+  // Whiteflies - warm, humid conditions
+  if (temp >= 22 && temp <= 32 && humidity >= 60 && humidity <= 80) {
+    alerts.push({
+      pest: 'Whiteflies',
+      risk: 'medium',
+      conditions: 'Moderate warmth with humidity favors whitefly activity',
+      prevention: [
+        'Use yellow sticky traps',
+        'Apply neem-based insecticide',
+        'Introduce parasitic wasps (Encarsia)',
+        'Remove heavily infested leaves'
+      ]
+    });
+  }
+
+  // Bacterial diseases - prolonged wet conditions
+  if ((rainfall > 10 || totalForecastRain > 30) && avgForecastHumidity > 75) {
+    alerts.push({
+      pest: 'Bacterial Diseases',
+      risk: totalForecastRain > 50 ? 'high' : 'medium',
+      conditions: 'Prolonged wet conditions promote bacterial infections',
+      prevention: [
+        'Improve field drainage',
+        'Avoid working in wet fields',
+        'Apply streptocycline spray preventively',
+        'Space plants for better air circulation'
+      ]
+    });
+  }
+
+  // Root rot - wet soil conditions
+  if (rainfall > 20 || totalForecastRain > 40) {
+    alerts.push({
+      pest: 'Root Rot',
+      risk: 'high',
+      conditions: 'Waterlogged soil leads to root diseases',
+      prevention: [
+        'Ensure proper field drainage',
+        'Create raised beds if possible',
+        'Apply Trichoderma to soil',
+        'Reduce irrigation frequency'
+      ]
+    });
+  }
+
+  // Fruit flies - warm, humid with ripe fruits
+  if (temp >= 25 && temp <= 35 && humidity >= 60) {
+    alerts.push({
+      pest: 'Fruit Flies',
+      risk: humidity > 75 ? 'high' : 'medium',
+      conditions: 'Warm, humid weather increases fruit fly activity',
+      prevention: [
+        'Set up pheromone traps',
+        'Collect and destroy fallen fruits',
+        'Apply protein bait sprays',
+        'Harvest fruits at proper maturity'
+      ]
+    });
+  }
+
+  // Caterpillars/Borers - moderate conditions after rain
+  if (temp >= 20 && temp <= 30 && (rainfall > 5 || totalForecastRain > 15)) {
+    alerts.push({
+      pest: 'Caterpillars & Borers',
+      risk: 'medium',
+      conditions: 'Post-rain warmth triggers caterpillar emergence',
+      prevention: [
+        'Apply Bt (Bacillus thuringiensis) spray',
+        'Set up pheromone traps for monitoring',
+        'Hand-pick visible caterpillars',
+        'Spray neem oil on affected areas'
+      ]
+    });
+  }
+
+  // Limit to top 4 most relevant alerts
+  return alerts
+    .sort((a, b) => {
+      const riskOrder = { high: 3, medium: 2, low: 1 };
+      return riskOrder[b.risk] - riskOrder[a.risk];
+    })
+    .slice(0, 4);
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -58,6 +210,10 @@ serve(async (req) => {
     const weatherData = weather as WeatherData;
     const forecastData = (forecast || []) as ForecastDay[];
     const farmData = farm as FarmData | undefined;
+
+    // Generate pest/disease alerts based on weather
+    const pestAlerts = analyzePestRisks(weatherData, forecastData);
+    console.log('Pest alerts generated:', pestAlerts.length);
 
     const languageInstruction = language === 'hi' 
       ? 'Respond in Hindi using Devanagari script.' 
@@ -196,7 +352,10 @@ Based on these conditions, provide:
       };
     }
 
-    console.log('Advisory generated successfully');
+    // Add pest alerts to the advisory response
+    advisory.pestAlerts = pestAlerts;
+
+    console.log('Advisory generated successfully with', pestAlerts.length, 'pest alerts');
 
     return new Response(
       JSON.stringify(advisory),
