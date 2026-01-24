@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Volume2, VolumeX, Loader2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -13,12 +13,36 @@ const ListenButton = ({ text, className, compact = false }: ListenButtonProps) =
   const { language, t } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+
+  // Clean up on unmount
+  useEffect(() => {
+    return () => {
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    };
+  }, []);
+
+  const getLanguageCode = (lang: string): string => {
+    switch (lang) {
+      case "hi":
+        return "hi-IN";
+      case "mr":
+        return "mr-IN";
+      default:
+        return "en-US";
+    }
+  };
 
   const handleListen = async () => {
-    if (isPlaying && audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
+    if (!window.speechSynthesis) {
+      console.error("Speech synthesis not supported");
+      return;
+    }
+
+    if (isPlaying) {
+      window.speechSynthesis.cancel();
       setIsPlaying(false);
       return;
     }
@@ -30,50 +54,44 @@ const ListenButton = ({ text, className, compact = false }: ListenButtonProps) =
     setIsLoading(true);
 
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/text-to-speech`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-          },
-          body: JSON.stringify({ text, language }),
-        }
-      );
+      // Cancel any ongoing speech
+      window.speechSynthesis.cancel();
 
-      if (!response.ok) {
-        throw new Error(`TTS request failed: ${response.status}`);
+      const utterance = new SpeechSynthesisUtterance(text);
+      utteranceRef.current = utterance;
+
+      // Set language based on current app language
+      const langCode = getLanguageCode(language);
+      utterance.lang = langCode;
+      utterance.rate = 0.9; // Slightly slower for clarity
+      utterance.pitch = 1;
+      utterance.volume = 1;
+
+      // Try to find a voice that matches the language
+      const voices = window.speechSynthesis.getVoices();
+      const matchingVoice = voices.find(voice => voice.lang.startsWith(langCode.split('-')[0]));
+      if (matchingVoice) {
+        utterance.voice = matchingVoice;
       }
 
-      const audioBlob = await response.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
-      
-      // Clean up previous audio
-      if (audioRef.current) {
-        audioRef.current.pause();
-        URL.revokeObjectURL(audioRef.current.src);
-      }
-
-      const audio = new Audio(audioUrl);
-      audioRef.current = audio;
-
-      audio.onended = () => {
-        setIsPlaying(false);
-        URL.revokeObjectURL(audioUrl);
+      utterance.onstart = () => {
+        setIsPlaying(true);
+        setIsLoading(false);
       };
 
-      audio.onerror = () => {
+      utterance.onend = () => {
         setIsPlaying(false);
-        console.error("Audio playback error");
       };
 
-      await audio.play();
-      setIsPlaying(true);
+      utterance.onerror = (event) => {
+        console.error("Speech synthesis error:", event.error);
+        setIsPlaying(false);
+        setIsLoading(false);
+      };
+
+      window.speechSynthesis.speak(utterance);
     } catch (error) {
       console.error("TTS error:", error);
-    } finally {
       setIsLoading(false);
     }
   };
