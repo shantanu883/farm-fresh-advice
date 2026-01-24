@@ -10,6 +10,7 @@ import BottomNavigation from "@/components/BottomNavigation";
 import { Settings as SettingsIcon, Globe, WifiOff, Info, Sprout } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Language } from "@/i18n/translations";
+import NotificationSettings from "@/components/NotificationSettings";
 
 const Settings = () => {
   const { language, setLanguage, t } = useLanguage();
@@ -27,6 +28,9 @@ const Settings = () => {
       </div>
 
       <div className="space-y-4">
+        {/* Notification Settings */}
+        <NotificationSettings />
+
         {/* Language Selection */}
         <Card className="card-elevated p-5">
           <div className="mb-4 flex items-center gap-3">
