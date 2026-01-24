@@ -151,21 +151,13 @@ const Farms = () => {
 
               {/* Farm-specific Advisory */}
               {selectedFarmId === farm.id && farmAdvisories[farm.id] && (
-                <div className="relative">
-                  <AdvisoryCard
-                    advice={farmAdvisories[farm.id].mainAdvice}
-                    riskLevel={farmAdvisories[farm.id].riskLevel}
-                    tips={farmAdvisories[farm.id].tips}
-                    irrigationAdvice={farmAdvisories[farm.id].irrigationAdvice}
-                    fertilizerAdvice={farmAdvisories[farm.id].fertilizerAdvice}
-                  />
-                  <div className="absolute bottom-4 right-4">
-                    <ListenButton 
-                      text={farmAdvisories[farm.id].mainAdvice} 
-                      compact 
-                    />
-                  </div>
-                </div>
+                <AdvisoryCard
+                  advice={farmAdvisories[farm.id].mainAdvice}
+                  riskLevel={farmAdvisories[farm.id].riskLevel}
+                  tips={farmAdvisories[farm.id].tips}
+                  irrigationAdvice={farmAdvisories[farm.id].irrigationAdvice}
+                  fertilizerAdvice={farmAdvisories[farm.id].fertilizerAdvice}
+                />
               )}
             </div>
           ))
