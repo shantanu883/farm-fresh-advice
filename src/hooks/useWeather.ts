@@ -130,8 +130,8 @@ export const useWeather = (): UseWeatherReturn => {
         },
         {
           enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 300000,
+          timeout: 30000,
+          maximumAge: 0,
         }
       );
     });
