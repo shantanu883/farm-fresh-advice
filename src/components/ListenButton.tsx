@@ -13,36 +13,22 @@ const ListenButton = ({ text, className, compact = false }: ListenButtonProps) =
   const { language, t } = useLanguage();
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Clean up on unmount
   useEffect(() => {
     return () => {
-      if (window.speechSynthesis) {
-        window.speechSynthesis.cancel();
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
       }
     };
   }, []);
 
-  const getLanguageCode = (lang: string): string => {
-    switch (lang) {
-      case "hi":
-        return "hi-IN";
-      case "mr":
-        return "mr-IN";
-      default:
-        return "en-US";
-    }
-  };
-
   const handleListen = async () => {
-    if (!window.speechSynthesis) {
-      console.error("Speech synthesis not supported");
-      return;
-    }
-
-    if (isPlaying) {
-      window.speechSynthesis.cancel();
+    if (isPlaying && audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current = null;
       setIsPlaying(false);
       return;
     }
@@ -54,46 +40,92 @@ const ListenButton = ({ text, className, compact = false }: ListenButtonProps) =
     setIsLoading(true);
 
     try {
-      // Cancel any ongoing speech
-      window.speechSynthesis.cancel();
+      // Use ElevenLabs TTS for high-quality Hindi/Marathi voices
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/text-to-speech`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          },
+          body: JSON.stringify({ 
+            text: text.substring(0, 3000), // Limit text length
+            language 
+          }),
+        }
+      );
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      utteranceRef.current = utterance;
-
-      // Set language based on current app language
-      const langCode = getLanguageCode(language);
-      utterance.lang = langCode;
-      utterance.rate = 0.9; // Slightly slower for clarity
-      utterance.pitch = 1;
-      utterance.volume = 1;
-
-      // Try to find a voice that matches the language
-      const voices = window.speechSynthesis.getVoices();
-      const matchingVoice = voices.find(voice => voice.lang.startsWith(langCode.split('-')[0]));
-      if (matchingVoice) {
-        utterance.voice = matchingVoice;
+      if (!response.ok) {
+        throw new Error(`TTS request failed: ${response.status}`);
       }
 
-      utterance.onstart = () => {
-        setIsPlaying(true);
-        setIsLoading(false);
-      };
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+      
+      const audio = new Audio(audioUrl);
+      audioRef.current = audio;
 
-      utterance.onend = () => {
+      audio.onended = () => {
         setIsPlaying(false);
+        URL.revokeObjectURL(audioUrl);
+        audioRef.current = null;
       };
 
-      utterance.onerror = (event) => {
-        console.error("Speech synthesis error:", event.error);
+      audio.onerror = (error) => {
+        console.error("Audio playback error:", error);
         setIsPlaying(false);
-        setIsLoading(false);
+        URL.revokeObjectURL(audioUrl);
+        audioRef.current = null;
       };
 
-      window.speechSynthesis.speak(utterance);
+      await audio.play();
+      setIsPlaying(true);
     } catch (error) {
       console.error("TTS error:", error);
+      // Fallback to browser TTS if ElevenLabs fails
+      fallbackToWebSpeech();
+    } finally {
       setIsLoading(false);
     }
+  };
+
+  const fallbackToWebSpeech = () => {
+    if (!window.speechSynthesis) {
+      console.error("Speech synthesis not supported");
+      return;
+    }
+
+    const getLanguageCode = (lang: string): string => {
+      switch (lang) {
+        case "hi":
+          return "hi-IN";
+        case "mr":
+          return "mr-IN";
+        default:
+          return "en-US";
+      }
+    };
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    const langCode = getLanguageCode(language);
+    utterance.lang = langCode;
+    utterance.rate = 0.9;
+    utterance.pitch = 1;
+    utterance.volume = 1;
+
+    const voices = window.speechSynthesis.getVoices();
+    const matchingVoice = voices.find(voice => voice.lang.startsWith(langCode.split('-')[0]));
+    if (matchingVoice) {
+      utterance.voice = matchingVoice;
+    }
+
+    utterance.onstart = () => setIsPlaying(true);
+    utterance.onend = () => setIsPlaying(false);
+    utterance.onerror = () => setIsPlaying(false);
+
+    window.speechSynthesis.speak(utterance);
   };
 
   if (compact) {
