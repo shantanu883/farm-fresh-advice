@@ -33,12 +33,15 @@ serve(async (req) => {
     console.log(`Generating TTS for language: ${language}, text length: ${text.length}`);
 
     // Select voice based on language
-    // Using multilingual voices that work well with Hindi and Marathi
+    // Using multilingual voices optimized for Indian languages
     let voiceId = "JBFqnCBsd6RMkjVDRZzb"; // George - default English voice
     
-    if (language === "hi" || language === "mr") {
-      // Use a voice that works well with Indian languages
-      voiceId = "onwK4e9ZLuTAKqWW03F9"; // Daniel - works well with multilingual
+    if (language === "hi") {
+      // Hindi - use Rachel which has better Hindi pronunciation
+      voiceId = "21m00Tcm4TlvDq8ikWAM"; // Rachel - excellent Hindi accent
+    } else if (language === "mr") {
+      // Marathi - use Bella which works well with Marathi
+      voiceId = "EXAVITQu4vr4xnSDxMaL"; // Sarah - good for Indian languages
     }
 
     const response = await fetch(
