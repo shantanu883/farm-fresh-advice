@@ -158,18 +158,27 @@ const Onboarding = () => {
                       const { latitude, longitude } = position.coords;
                       
                       // Reverse geocode using OpenStreetMap Nominatim (free, no API key needed)
+                      // Using zoom=18 for street-level detail
                       const response = await fetch(
-                        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=10`
+                        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&zoom=18&addressdetails=1`,
+                        { headers: { 'User-Agent': 'FarmAdvisoryApp/1.0' } }
                       );
                       
                       if (response.ok) {
                         const data = await response.json();
                         const address = data.address || {};
-                        const city = address.city || address.town || address.village || address.county || "";
-                        const state = address.state || "";
-                        const locationString = [city, state].filter(Boolean).join(", ");
                         
-                        setProfile({ ...profile, location: locationString || `${latitude.toFixed(4)}, ${longitude.toFixed(4)}` });
+                        // Build detailed address: road/neighbourhood, village/town, district, state
+                        const road = address.road || address.neighbourhood || address.suburb || "";
+                        const locality = address.village || address.town || address.city || "";
+                        const district = address.county || address.state_district || "";
+                        const state = address.state || "";
+                        
+                        // Create detailed location string
+                        const parts = [road, locality, district, state].filter(Boolean);
+                        const locationString = parts.slice(0, 3).join(", "); // Limit to 3 parts for readability
+                        
+                        setProfile({ ...profile, location: locationString || `${latitude.toFixed(6)}, ${longitude.toFixed(6)}` });
                         
                         // Also cache for weather
                         localStorage.setItem('userGeoLocation', JSON.stringify({ lat: latitude, lon: longitude }));
