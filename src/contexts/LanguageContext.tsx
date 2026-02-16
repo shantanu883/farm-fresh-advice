@@ -15,6 +15,26 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     return (stored as Language) || "en";
   });
 
+  // Ensure all translation objects contain the same keys as English.
+  // Missing keys will be filled with the English value so UI switches consistently.
+  useEffect(() => {
+    try {
+      const enKeys = Object.keys(translations.en) as TranslationKey[];
+      (Object.keys(translations) as Language[]).forEach((lang) => {
+        if (lang === 'en') return;
+        const target = (translations as any)[lang] as Record<string, string>;
+        enKeys.forEach((k) => {
+          if (!(k in target)) {
+            // fill missing key with English fallback
+            target[k] = (translations.en as any)[k];
+          }
+        });
+      });
+    } catch (e) {
+      // silent
+    }
+  }, []);
+
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     localStorage.setItem("selectedLanguage", lang);

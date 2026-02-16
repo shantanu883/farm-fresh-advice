@@ -89,6 +89,35 @@ const Advisory = () => {
     }
   }, [isSubscribed, weatherAlerts, showLocalNotification]);
 
+  // Poll weather every 60 seconds when subscribed to notifications so mobile/desktop get periodic updates
+  useEffect(() => {
+    if (!isSubscribed) return;
+
+    let mounted = true;
+    const interval = setInterval(async () => {
+      try {
+        // refreshWeather will update `weather` and `forecast` from useWeather
+        await refreshWeather();
+        if (!mounted) return;
+        const newAlerts = checkWeatherAlerts(forecast);
+        if (newAlerts && newAlerts.length > 0) {
+          const dangerAlerts = newAlerts.filter(a => a.severity === 'danger');
+          const alertToShow = dangerAlerts[0] || newAlerts[0];
+          if (alertToShow) {
+            showLocalNotification(alertToShow);
+          }
+        }
+      } catch (e) {
+        console.error('Periodic weather poll failed:', e);
+      }
+    }, 60 * 1000);
+
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+    };
+  }, [isSubscribed, refreshWeather, forecast, checkWeatherAlerts, showLocalNotification]);
+
   const handleRefresh = async () => {
     await refreshWeather();
     if (weather) {
