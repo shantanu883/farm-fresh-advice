@@ -38,6 +38,15 @@ const ListenButton = ({ text, className, compact = false }: ListenButtonProps) =
     };
   }, []);
 
+  // Reload voices when app language changes (some browsers expose new voices)
+  useEffect(() => {
+    if (!window.speechSynthesis) return;
+    const reload = () => setVoices(window.speechSynthesis.getVoices() || []);
+    // small timeout to allow voices to load for the selected language
+    const t = setTimeout(reload, 200);
+    return () => clearTimeout(t);
+  }, [language]);
+
   const getLanguageCode = (lang: string): string => {
     switch (lang) {
       case "en":
@@ -112,7 +121,7 @@ const ListenButton = ({ text, className, compact = false }: ListenButtonProps) =
 
   const handleListen = async () => {
     if (!window.speechSynthesis) {
-      toast.error("Speech synthesis not supported on this device");
+      toast.error(t('notificationsNotSupported') || 'Speech synthesis not supported on this device');
       return;
     }
 
@@ -173,7 +182,7 @@ const ListenButton = ({ text, className, compact = false }: ListenButtonProps) =
         setIsPlaying(false);
         setIsLoading(false);
         if (event.error !== 'canceled') {
-          toast.error("Could not play audio");
+          toast.error(t('unexpectedError') || "Could not play audio");
         }
       };
 
