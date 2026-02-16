@@ -8,6 +8,14 @@ const languages: { code: Language; label: string; native: string }[] = [
   { code: "en", label: "English", native: "English" },
   { code: "hi", label: "Hindi", native: "हिंदी" },
   { code: "mr", label: "Marathi", native: "मराठी" },
+  { code: "ta", label: "Tamil", native: "தமிழ்" },
+  { code: "te", label: "Telugu", native: "తెలుగు" },
+  { code: "kn", label: "Kannada", native: "ಕನ್ನಡ" },
+  { code: "bn", label: "Bengali", native: "বাংলা" },
+  { code: "gu", label: "Gujarati", native: "ગુજરાતી" },
+  { code: "or", label: "Odia", native: "ଓଡିଆ" },
+  { code: "ml", label: "Malayalam", native: "മലയാളം" },
+  { code: "pa", label: "Punjabi", native: "ਪੰਜਾਬੀ" },
 ];
 
 const Welcome = () => {

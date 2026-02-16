@@ -40,12 +40,30 @@ const ListenButton = ({ text, className, compact = false }: ListenButtonProps) =
 
   const getLanguageCode = (lang: string): string => {
     switch (lang) {
+      case "en":
+        return "en-IN";
       case "hi":
         return "hi-IN";
       case "mr":
         return "mr-IN";
+      case "ta":
+        return "ta-IN";
+      case "te":
+        return "te-IN";
+      case "kn":
+        return "kn-IN";
+      case "bn":
+        return "bn-IN";
+      case "gu":
+        return "gu-IN";
+      case "or":
+        return "or-IN";
+      case "ml":
+        return "ml-IN";
+      case "pa":
+        return "pa-IN";
       default:
-        return "en-US";
+        return "en-IN";
     }
   };
 
@@ -121,9 +139,10 @@ const ListenButton = ({ text, className, compact = false }: ListenButtonProps) =
       const langCode = getLanguageCode(language);
       utterance.lang = langCode;
       
-      // Optimize settings for Indian languages
-      if (language === "hi" || language === "mr") {
-        utterance.rate = 0.85; // Slower for better clarity
+      // Optimize settings for different language groups
+      // Indian languages need slower speech for clarity
+      if (["hi", "mr", "ta", "te", "kn", "bn", "gu", "or", "ml", "pa"].includes(language)) {
+        utterance.rate = 0.8; // Slower for better clarity in Indian languages
         utterance.pitch = 1.0;
       } else {
         utterance.rate = 0.9;

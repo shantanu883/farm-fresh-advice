@@ -103,6 +103,30 @@ const Settings = () => {
               <SelectItem value="mr" className="text-farmer-base py-3">
                 मराठी (Marathi)
               </SelectItem>
+              <SelectItem value="ta" className="text-farmer-base py-3">
+                தமிழ் (Tamil)
+              </SelectItem>
+              <SelectItem value="te" className="text-farmer-base py-3">
+                తెలుగు (Telugu)
+              </SelectItem>
+              <SelectItem value="kn" className="text-farmer-base py-3">
+                ಕನ್ನಡ (Kannada)
+              </SelectItem>
+              <SelectItem value="bn" className="text-farmer-base py-3">
+                বাংলা (Bengali)
+              </SelectItem>
+              <SelectItem value="gu" className="text-farmer-base py-3">
+                ગુજરાતી (Gujarati)
+              </SelectItem>
+              <SelectItem value="or" className="text-farmer-base py-3">
+                ଓଡିଆ (Odia)
+              </SelectItem>
+              <SelectItem value="ml" className="text-farmer-base py-3">
+                മലയാളം (Malayalam)
+              </SelectItem>
+              <SelectItem value="pa" className="text-farmer-base py-3">
+                ਪੰਜਾਬੀ (Punjabi)
+              </SelectItem>
             </SelectContent>
           </Select>
         </Card>

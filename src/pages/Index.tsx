@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { 
@@ -11,16 +12,25 @@ import {
   Wheat,
   CloudSun,
   Settings,
-  Download
+  Download,
+  AlertCircle,
+  Bell
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useFarmerProfile } from "@/hooks/useFarmerProfile";
+import { useWeather } from "@/hooks/useWeather";
+import { usePushNotifications } from "@/hooks/usePushNotifications";
+import WeatherAlertBanner from "@/components/WeatherAlertBanner";
 import BottomNavigation from "@/components/BottomNavigation";
+import { Badge } from "@/components/ui/badge";
 
 const Home = () => {
   const navigate = useNavigate();
   const { t } = useLanguage();
   const { profile, loading: profileLoading } = useFarmerProfile();
+  const { weather, forecast, isLoading: isWeatherLoading } = useWeather();
+  const { checkWeatherAlerts, isSubscribed } = usePushNotifications();
+  const [weatherAlerts, setWeatherAlerts] = useState<any[]>([]);
 
   // Get all unique crops from all farms
   const allCrops = profile?.farms.flatMap(farm => farm.crops) || [];
@@ -28,6 +38,14 @@ const Home = () => {
   
   // Calculate total farms
   const totalFarms = profile?.farms.length || 0;
+
+  // Update weather alerts when forecast changes
+  useEffect(() => {
+    if (forecast && forecast.length > 0) {
+      const alerts = checkWeatherAlerts(forecast, weather);
+      setWeatherAlerts(alerts);
+    }
+  }, [forecast, weather, checkWeatherAlerts]);
 
   // Get greeting based on time of day
   const getGreeting = () => {
@@ -134,6 +152,18 @@ const Home = () => {
 
       {/* Main Content */}
       <div className="flex-1 space-y-6 px-4 pt-6">
+        {/* Weather Alerts Section */}
+        {weatherAlerts.length > 0 && (
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <AlertCircle className="h-5 w-5 text-destructive" />
+              <h2 className="text-lg font-semibold text-foreground">{t("activeAlerts")}</h2>
+              <Badge variant="destructive" className="ml-auto">{weatherAlerts.length}</Badge>
+            </div>
+            <WeatherAlertBanner alerts={weatherAlerts} />
+          </div>
+        )}
+
         {/* Get Today's Advisory - Primary CTA */}
         <Button 
           size="lg"
@@ -143,6 +173,27 @@ const Home = () => {
           <CloudSun className="mr-3 h-6 w-6" />
           {t("getTodaysAdvice")}
         </Button>
+
+        {/* Actionable Recommendation Card */}
+        {weatherAlerts.length > 0 && weatherAlerts[0].recommendation && (
+          <Card className="border-0 card-elevated bg-gradient-to-br from-amber-50 to-orange-50 dark:from-amber-900/20 dark:to-orange-900/20">
+            <CardContent className="p-4">
+              <div className="flex gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-200 dark:bg-amber-800 flex-shrink-0">
+                  <Leaf className="h-5 w-5 text-amber-700 dark:text-amber-200" />
+                </div>
+                <div className="flex-1">
+                  <p className="text-sm font-semibold text-foreground">{t("alertRecommendation")}</p>
+                  <p className="text-sm text-muted-foreground mt-1">{weatherAlerts[0].recommendation}</p>
+                  <p className="text-xs font-medium text-amber-700 dark:text-amber-300 mt-2">
+                    💡 {weatherAlerts[0].action}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
 
         {/* Current Crops Section */}
         {uniqueCrops.length > 0 && (

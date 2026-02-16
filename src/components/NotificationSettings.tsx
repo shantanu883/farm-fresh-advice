@@ -85,6 +85,22 @@ const NotificationSettings = () => {
               <span>💨</span>
               <span>{t('windAlert')}</span>
             </div>
+            <div className="flex items-center gap-2 text-farmer-sm text-muted-foreground">
+              <span>💧</span>
+              <span>{t('highHumidityAlert')}</span>
+            </div>
+            <div className="flex items-center gap-2 text-farmer-sm text-muted-foreground">
+              <span>🦠</span>
+              <span>{t('diseaseRiskAlert')}</span>
+            </div>
+            <div className="flex items-center gap-2 text-farmer-sm text-muted-foreground">
+              <span>🐛</span>
+              <span>{t('pestActivityAlert')}</span>
+            </div>
+            <div className="flex items-center gap-2 text-farmer-sm text-muted-foreground">
+              <span>💦</span>
+              <span>{t('irrigationAdvisoryAlert')}</span>
+            </div>
           </div>
 
           <Button 
@@ -122,6 +138,22 @@ const NotificationSettings = () => {
           </div>
           <div className="flex items-center justify-between py-2">
             <span className="text-farmer-base">💨 {t('windAlert')}</span>
+            <Switch checked disabled />
+          </div>
+          <div className="flex items-center justify-between py-2">
+            <span className="text-farmer-base">💧 {t('highHumidityAlert')}</span>
+            <Switch checked disabled />
+          </div>
+          <div className="flex items-center justify-between py-2">
+            <span className="text-farmer-base">🦠 {t('diseaseRiskAlert')}</span>
+            <Switch checked disabled />
+          </div>
+          <div className="flex items-center justify-between py-2">
+            <span className="text-farmer-base">🐛 {t('pestActivityAlert')}</span>
+            <Switch checked disabled />
+          </div>
+          <div className="flex items-center justify-between py-2">
+            <span className="text-farmer-base">💦 {t('irrigationAdvisoryAlert')}</span>
             <Switch checked disabled />
           </div>
         </div>
