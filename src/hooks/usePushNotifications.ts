@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 export interface WeatherAlert {
   type: 'heavy_rain' | 'frost' | 'heat' | 'strong_wind' | 'high_humidity' | 'disease_risk' | 'pest_alert' | 'irrigation_advisory';
@@ -36,6 +37,8 @@ export const usePushNotifications = (): UsePushNotificationsReturn => {
   const [permission, setPermission] = useState<NotificationPermission | 'default'>('default');
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [swRegistration, setSwRegistration] = useState<ServiceWorkerRegistration | null>(null);
+  const { t, language } = useLanguage();
   
   const isSupported = typeof window !== 'undefined' && 
     'Notification' in window && 
@@ -59,6 +62,7 @@ export const usePushNotifications = (): UsePushNotificationsReturn => {
     try {
       const registration = await navigator.serviceWorker.register('/sw.js');
       console.log('Service Worker registered:', registration);
+      setSwRegistration(registration);
       return registration;
     } catch (error) {
       console.error('Service Worker registration failed:', error);
@@ -109,10 +113,10 @@ export const usePushNotifications = (): UsePushNotificationsReturn => {
       if (day.rainfall >= THRESHOLDS.HEAVY_RAIN_MM) {
         alerts.push({
           type: 'heavy_rain',
-          title: '🌧️ Heavy Rain Warning',
-          message: `Heavy rainfall of ${day.rainfall}mm expected on ${day.dayName}. This may cause waterlogging and crop damage.`,
-          recommendation: 'Avoid irrigation, ensure proper drainage, delay pesticide application',
-          action: 'Prepare drainage channels and cover vulnerable crops',
+          title: `🌧️ ${t('heavyRainAlert')}`,
+          message: `${t('heavyRainfallWarning')} (${day.rainfall}mm on ${day.dayName})`,
+          recommendation: t('alertRecommendation') || 'Avoid irrigation, ensure proper drainage',
+          action: t('alertAction') || 'Prepare drainage channels and cover vulnerable crops',
           severity: 'warning'
         });
       }
@@ -121,10 +125,10 @@ export const usePushNotifications = (): UsePushNotificationsReturn => {
       if (day.tempMin <= THRESHOLDS.FROST_TEMP_C) {
         alerts.push({
           type: 'frost',
-          title: '❄️ Frost Warning',
-          message: `Temperature dropping to ${day.tempMin}°C on ${day.dayName}. Risk of crop damage from frost.`,
-          recommendation: 'Cover crops, use frost protection cloth, increase irrigation',
-          action: 'Apply protective measures before sunset',
+          title: `❄️ ${t('frostAlert')}`,
+          message: `${t('frostAlert')} - ${day.tempMin}°C on ${day.dayName}`,
+          recommendation: t('alertRecommendation') || 'Cover crops, use frost protection cloth',
+          action: t('alertAction') || 'Apply protective measures before sunset',
           severity: 'danger'
         });
       }
@@ -133,10 +137,10 @@ export const usePushNotifications = (): UsePushNotificationsReturn => {
       if (day.tempMax >= THRESHOLDS.HEAT_TEMP_C) {
         alerts.push({
           type: 'heat',
-          title: '🔥 Heat Warning',
-          message: `Extreme heat of ${day.tempMax}°C expected on ${day.dayName}. High risk of crop stress.`,
-          recommendation: 'Increase irrigation frequency, provide shade, mulch soil',
-          action: 'Water early morning and evening, check soil moisture daily',
+          title: `🔥 ${t('heatAlert')}`,
+          message: `${t('heatAlert')} - ${day.tempMax}°C on ${day.dayName}`,
+          recommendation: t('alertRecommendation') || 'Increase irrigation frequency, provide shade',
+          action: t('alertAction') || 'Water early morning and evening',
           severity: 'danger'
         });
       }
@@ -146,10 +150,10 @@ export const usePushNotifications = (): UsePushNotificationsReturn => {
       if (windSpeedKmh >= THRESHOLDS.STRONG_WIND_KMH) {
         alerts.push({
           type: 'strong_wind',
-          title: '💨 Strong Wind Warning',
-          message: `Strong winds of ${Math.round(windSpeedKmh)} km/h expected on ${day.dayName}.`,
-          recommendation: 'Suspend spraying, secure structures, support tall crops',
-          action: 'Tie up climbing crops, store loose materials safely',
+          title: `💨 ${t('windAlert')}`,
+          message: `${t('windAlert')} - ${Math.round(windSpeedKmh)} km/h on ${day.dayName}`,
+          recommendation: t('alertRecommendation') || 'Suspend spraying, secure structures',
+          action: t('alertAction') || 'Tie up climbing crops',
           severity: 'warning'
         });
       }
@@ -158,10 +162,10 @@ export const usePushNotifications = (): UsePushNotificationsReturn => {
       if (day.humidity >= THRESHOLDS.HIGH_HUMIDITY_PERCENT) {
         alerts.push({
           type: 'disease_risk',
-          title: '🦠 Disease Risk Alert',
-          message: `High humidity of ${day.humidity}% on ${day.dayName}. Increased risk of fungal diseases.`,
-          recommendation: 'Improve air circulation, apply fungicide preventively, reduce irrigation',
-          action: 'Scout fields for disease signs, apply fungicide if needed',
+          title: `🦠 ${t('diseaseRiskAlert')}`,
+          message: `${t('diseaseRiskAlert')} - ${day.humidity}% on ${day.dayName}`,
+          recommendation: t('alertRecommendation') || 'Improve air circulation, apply fungicide preventively',
+          action: t('alertAction') || 'Scout fields for disease signs',
           severity: 'warning'
         });
       }
@@ -170,10 +174,10 @@ export const usePushNotifications = (): UsePushNotificationsReturn => {
       if (day.rainfall < THRESHOLDS.LOW_RAINFALL_MM && day.rainfall > 0) {
         alerts.push({
           type: 'irrigation_advisory',
-          title: '💧 Low Rainfall - Irrigation Needed',
-          message: `Only ${day.rainfall}mm rainfall expected on ${day.dayName}. Plan supplemental irrigation.`,
-          recommendation: 'Schedule irrigation, increase water supply, check soil moisture',
-          action: 'Arrange water supply and irrigation equipment',
+          title: `💧 ${t('irrigationAdvisoryAlert')}`,
+          message: `${t('irrigationAdvisoryAlert')} - ${day.rainfall}mm on ${day.dayName}`,
+          recommendation: t('alertRecommendation') || 'Schedule irrigation, check soil moisture',
+          action: t('alertAction') || 'Arrange water supply',
           severity: 'info'
         });
       }
@@ -182,10 +186,10 @@ export const usePushNotifications = (): UsePushNotificationsReturn => {
       if (day.tempMax >= 25 && day.humidity >= 70) {
         alerts.push({
           type: 'pest_alert',
-          title: '🐛 Pest Activity Alert',
-          message: `Favorable conditions for pest multiplication (${day.tempMax}°C, ${day.humidity}% humidity).`,
-          recommendation: 'Monitor crops closely, use integrated pest management, apply insecticides if needed',
-          action: 'Scout field for pests, maintain crop hygiene',
+          title: `🐛 ${t('pestActivityAlert')}`,
+          message: `${t('pestActivityAlert')} (${day.tempMax}°C, ${day.humidity}% humidity).`,
+          recommendation: t('preventiveMeasures') || 'Monitor crops, use IPM',
+          action: t('alertAction') || 'Scout field for pests',
           severity: 'warning'
         });
       }
@@ -200,41 +204,53 @@ export const usePushNotifications = (): UsePushNotificationsReturn => {
   }, []);
 
   // Show local notification
-  const showLocalNotification = useCallback((alert: WeatherAlert) => {
+  const showLocalNotification = useCallback(async (alert: WeatherAlert) => {
     if (permission !== 'granted') return;
-    
+
     // Check if we've already shown this alert today
     const alertKey = `alert_${alert.type}_${new Date().toDateString()}`;
     if (localStorage.getItem(alertKey)) return;
-    
+
+    const body = `${alert.message}${alert.recommendation ? ` - ${alert.recommendation}` : ''}`;
+
     try {
-      const notification = new Notification(alert.title, {
-        body: alert.message + (alert.recommendation ? ` - ${alert.recommendation}` : ''),
-        icon: '/icons/icon-192x192.png',
-        badge: '/icons/icon-72x72.png',
-        tag: alert.type,
-        requireInteraction: true
-      });
-      
-      notification.onclick = () => {
-        window.focus();
-        notification.close();
-      };
-      
+      // If service worker registration exists, use it to show notification (better on mobile/background)
+      if (swRegistration) {
+        await swRegistration.showNotification(alert.title, {
+          body,
+          icon: '/icons/icon-192x192.png',
+          badge: '/icons/icon-72x72.png',
+          tag: alert.type,
+          requireInteraction: true,
+          data: { url: '/advisory' }
+        });
+      } else {
+        const notification = new Notification(alert.title, {
+          body,
+          icon: '/icons/icon-192x192.png',
+          badge: '/icons/icon-72x72.png',
+          tag: alert.type,
+          requireInteraction: true
+        });
+
+        notification.onclick = () => {
+          window.focus();
+          notification.close();
+        };
+      }
+
       // Mark as shown and save to history
       localStorage.setItem(alertKey, 'true');
-      
-      // Save to alert history
+
       const history = getAlertHistory();
       const newAlert = { ...alert, timestamp: Date.now() };
       history.unshift(newAlert);
-      // Keep only last 30 alerts
       const limitedHistory = history.slice(0, 30);
       localStorage.setItem('alertHistory', JSON.stringify(limitedHistory));
     } catch (error) {
       console.error('Error showing notification:', error);
     }
-  }, [permission]);
+  }, [permission, swRegistration, t]);
 
   // Get alert history
   const getAlertHistory = useCallback((): WeatherAlert[] => {
