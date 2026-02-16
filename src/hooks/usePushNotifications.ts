@@ -70,6 +70,34 @@ export const usePushNotifications = (): UsePushNotificationsReturn => {
     }
   }, []);
 
+  // On mount, try to obtain an existing service worker registration (useful
+  // when permission was granted in a previous session). This ensures we can
+  // use `registration.showNotification` even if the hook wasn't the one that
+  // registered the SW in this session.
+  useEffect(() => {
+    if (!('serviceWorker' in navigator)) return;
+
+    (async () => {
+      try {
+        const existing = await navigator.serviceWorker.getRegistration();
+        if (existing) {
+          setSwRegistration(existing);
+          console.log('Found existing SW registration in hook:', existing);
+          return;
+        }
+
+        // Fallback to ready registration (waits until SW active)
+        const ready = await navigator.serviceWorker.ready;
+        if (ready) {
+          setSwRegistration(ready);
+          console.log('Service worker ready, set registration in hook');
+        }
+      } catch (e) {
+        console.warn('Could not get existing service worker registration', e);
+      }
+    })();
+  }, []);
+
   // Request notification permission
   const requestPermission = useCallback(async (): Promise<boolean> => {
     if (!isSupported) return false;

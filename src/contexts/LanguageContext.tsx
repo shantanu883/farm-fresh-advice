@@ -23,12 +23,18 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
       (Object.keys(translations) as Language[]).forEach((lang) => {
         if (lang === 'en') return;
         const target = (translations as any)[lang] as Record<string, string>;
+        const missing: string[] = [];
         enKeys.forEach((k) => {
           if (!(k in target)) {
-            // fill missing key with English fallback
+            // record missing and fill with English fallback
+            missing.push(k as string);
             target[k] = (translations.en as any)[k];
           }
         });
+
+        if (missing.length > 0) {
+          console.info(`i18n: Filled ${missing.length} missing keys for '${lang}'. Keys:`, missing);
+        }
       });
     } catch (e) {
       // silent
