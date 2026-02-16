@@ -79,11 +79,14 @@ const Advisory = () => {
 
   // Send push notifications for weather alerts
   useEffect(() => {
+    console.log('[Advisory] Notification effect: isSubscribed=', isSubscribed, 'weatherAlerts length=', weatherAlerts.length);
+    
     if (isSubscribed && weatherAlerts.length > 0) {
       // Show notification for the most severe alert
       const dangerAlerts = weatherAlerts.filter(a => a.severity === 'danger');
       const alertToShow = dangerAlerts[0] || weatherAlerts[0];
       if (alertToShow) {
+        console.log('[Advisory] Showing alert notification:', alertToShow.type);
         showLocalNotification(alertToShow);
       }
     }
@@ -91,28 +94,39 @@ const Advisory = () => {
 
   // Poll weather every 60 seconds when subscribed to notifications so mobile/desktop get periodic updates
   useEffect(() => {
-    if (!isSubscribed) return;
+    console.log('[Advisory] Setting up polling: isSubscribed=', isSubscribed);
+    
+    if (!isSubscribed) {
+      console.log('[Advisory] isSubscribed is false, skipping polling setup');
+      return;
+    }
 
     let mounted = true;
     const interval = setInterval(async () => {
+      console.log('[Advisory] Polling tick at', new Date().toISOString());
       try {
         // refreshWeather will update `weather` and `forecast` from useWeather
         await refreshWeather();
         if (!mounted) return;
+        
         const newAlerts = checkWeatherAlerts(forecast);
+        console.log('[Advisory] Polling: found', newAlerts.length, 'alerts');
+        
         if (newAlerts && newAlerts.length > 0) {
           const dangerAlerts = newAlerts.filter(a => a.severity === 'danger');
           const alertToShow = dangerAlerts[0] || newAlerts[0];
           if (alertToShow) {
+            console.log('[Advisory] Showing alert from polling:', alertToShow.type);
             showLocalNotification(alertToShow);
           }
         }
       } catch (e) {
-        console.error('Periodic weather poll failed:', e);
+        console.error('[Advisory] Periodic weather poll failed:', e);
       }
     }, 60 * 1000);
 
     return () => {
+      console.log('[Advisory] Cleaning up polling interval');
       mounted = false;
       clearInterval(interval);
     };

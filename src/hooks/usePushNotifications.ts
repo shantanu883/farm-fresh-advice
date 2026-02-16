@@ -75,25 +75,30 @@ export const usePushNotifications = (): UsePushNotificationsReturn => {
   // use `registration.showNotification` even if the hook wasn't the one that
   // registered the SW in this session.
   useEffect(() => {
-    if (!('serviceWorker' in navigator)) return;
+    if (!('serviceWorker' in navigator)) {
+      console.log('[SW effect] serviceWorker not available in navigator');
+      return;
+    }
 
     (async () => {
       try {
+        console.log('[SW effect] Attempting navigator.serviceWorker.getRegistration()...');
         const existing = await navigator.serviceWorker.getRegistration();
         if (existing) {
+          console.log('[SW effect] Found existing SW registration:', existing);
           setSwRegistration(existing);
-          console.log('Found existing SW registration in hook:', existing);
           return;
         }
 
+        console.log('[SW effect] No existing registration found, waiting for ready...');
         // Fallback to ready registration (waits until SW active)
         const ready = await navigator.serviceWorker.ready;
         if (ready) {
+          console.log('[SW effect] Service worker ready, set registration in hook:', ready);
           setSwRegistration(ready);
-          console.log('Service worker ready, set registration in hook');
         }
       } catch (e) {
-        console.warn('Could not get existing service worker registration', e);
+        console.warn('[SW effect] Could not get existing service worker registration', e);
       }
     })();
   }, []);
@@ -102,25 +107,37 @@ export const usePushNotifications = (): UsePushNotificationsReturn => {
   const requestPermission = useCallback(async (): Promise<boolean> => {
     if (!isSupported) return false;
     
+    console.log('[requestPermission] Starting permission request');
     setIsLoading(true);
     
     try {
       // Register service worker first
-      await registerServiceWorker();
+      console.log('[requestPermission] Registering service worker...');
+      const swReg = await registerServiceWorker();
+      if (swReg) {
+        console.log('[requestPermission] Service worker registered successfully');
+      } else {
+        console.warn('[requestPermission] Service worker registration returned null');
+      }
+
       
       // Request permission
+      console.log('[requestPermission] Requesting Notification.permission...');
       const result = await Notification.requestPermission();
+      console.log('[requestPermission] Notification.requestPermission() returned:', result);
       setPermission(result);
       
       if (result === 'granted') {
+        console.log('[requestPermission] Permission granted, setting subscribed to true');
         setIsSubscribed(true);
         localStorage.setItem('pushNotificationsEnabled', 'true');
         return true;
       }
       
+      console.warn('[requestPermission] Permission not granted:', result);
       return false;
     } catch (error) {
-      console.error('Error requesting notification permission:', error);
+      console.error('[requestPermission] Error requesting notification permission:', error);
       return false;
     } finally {
       setIsLoading(false);
@@ -233,17 +250,27 @@ export const usePushNotifications = (): UsePushNotificationsReturn => {
 
   // Show local notification
   const showLocalNotification = useCallback(async (alert: WeatherAlert) => {
-    if (permission !== 'granted') return;
+    console.log('[showLocalNotification] Called with alert:', alert.type, 'Permission:', permission, 'SW Reg:', !!swRegistration);
+    
+    if (permission !== 'granted') {
+      console.warn('[showLocalNotification] Permission not granted:', permission);
+      return;
+    }
 
     // Check if we've already shown this alert today
     const alertKey = `alert_${alert.type}_${new Date().toDateString()}`;
-    if (localStorage.getItem(alertKey)) return;
+    if (localStorage.getItem(alertKey)) {
+      console.log('[showLocalNotification] Alert already shown today:', alert.type);
+      return;
+    }
 
     const body = `${alert.message}${alert.recommendation ? ` - ${alert.recommendation}` : ''}`;
+    console.log('[showLocalNotification] Attempting to show notification with body:', body.substring(0, 50) + '...');
 
     try {
       // If service worker registration exists, use it to show notification (better on mobile/background)
       if (swRegistration) {
+        console.log('[showLocalNotification] Showing via Service Worker registration');
         await swRegistration.showNotification(alert.title, {
           body,
           icon: '/icons/icon-192x192.png',
@@ -253,6 +280,7 @@ export const usePushNotifications = (): UsePushNotificationsReturn => {
           data: { url: '/advisory' }
         });
       } else {
+        console.log('[showLocalNotification] No SW registration, using Notification API directly');
         const notification = new Notification(alert.title, {
           body,
           icon: '/icons/icon-192x192.png',
@@ -267,6 +295,8 @@ export const usePushNotifications = (): UsePushNotificationsReturn => {
         };
       }
 
+      console.log('[showLocalNotification] Notification shown successfully');
+
       // Mark as shown and save to history
       localStorage.setItem(alertKey, 'true');
 
@@ -276,7 +306,7 @@ export const usePushNotifications = (): UsePushNotificationsReturn => {
       const limitedHistory = history.slice(0, 30);
       localStorage.setItem('alertHistory', JSON.stringify(limitedHistory));
     } catch (error) {
-      console.error('Error showing notification:', error);
+      console.error('[showLocalNotification] Error showing notification:', error);
     }
   }, [permission, swRegistration, t]);
 
