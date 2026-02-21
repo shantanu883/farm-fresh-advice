@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "642084093245",
+    "project_id": "farm-fresh-advice",
+    "storage_bucket": "farm-fresh-advice.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:642084093245:android:c6bd1100f3f7cbda411954",
+        "android_client_info": {
+          "package_name": "com.shantanu.farmfreshadvice"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB86TWYXAybOnSsdn5IzseaFSTYC3dEJQA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

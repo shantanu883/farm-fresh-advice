@@ -1,7 +1,8 @@
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Volume2, VolumeX, Loader2 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { TextToSpeech } from "@capacitor-community/text-to-speech";
 import { toast } from "sonner";
 
 interface ListenButtonProps {
@@ -12,45 +13,11 @@ interface ListenButtonProps {
 
 const ListenButton = ({ text, className, compact = false }: ListenButtonProps) => {
   const { language, t } = useLanguage();
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
-  // Load voices when available
-  useEffect(() => {
-    const loadVoices = () => {
-      const availableVoices = window.speechSynthesis?.getVoices() || [];
-      setVoices(availableVoices);
-    };
-
-    loadVoices();
-    
-    // Chrome loads voices asynchronously
-    if (window.speechSynthesis) {
-      window.speechSynthesis.onvoiceschanged = loadVoices;
-    }
-
-    return () => {
-      if (window.speechSynthesis) {
-        window.speechSynthesis.cancel();
-      }
-    };
-  }, []);
-
-  // Reload voices when app language changes (some browsers expose new voices)
-  useEffect(() => {
-    if (!window.speechSynthesis) return;
-    const reload = () => setVoices(window.speechSynthesis.getVoices() || []);
-    // small timeout to allow voices to load for the selected language
-    const t = setTimeout(reload, 200);
-    return () => clearTimeout(t);
-  }, [language]);
-
-  const getLanguageCode = (lang: string): string => {
-    switch (lang) {
-      case "en":
-        return "en-IN";
+  const getLanguageCode = () => {
+    switch (language) {
       case "hi":
         return "hi-IN";
       case "mr":
@@ -76,122 +43,42 @@ const ListenButton = ({ text, className, compact = false }: ListenButtonProps) =
     }
   };
 
-  const findBestVoice = (langCode: string): SpeechSynthesisVoice | null => {
-    if (voices.length === 0) return null;
+const speak = async () => {
+  if (!text || text.trim().length === 0) return;
 
-    const langPrefix = langCode.split('-')[0];
-    
-    // Priority order for Indian languages:
-    // 1. Google voices (best quality)
-    // 2. Microsoft voices 
-    // 3. Any voice matching the language
-    
-    // Try to find Google voice first (best quality)
-    let voice = voices.find(v => 
-      v.lang.startsWith(langPrefix) && v.name.toLowerCase().includes('google')
-    );
-    
-    if (!voice) {
-      // Try Microsoft voice
-      voice = voices.find(v => 
-        v.lang.startsWith(langPrefix) && v.name.toLowerCase().includes('microsoft')
-      );
-    }
-    
-    if (!voice) {
-      // Try any female voice (often clearer)
-      voice = voices.find(v => 
-        v.lang.startsWith(langPrefix) && 
-        (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('woman'))
-      );
-    }
-    
-    if (!voice) {
-      // Any voice matching language
-      voice = voices.find(v => v.lang.startsWith(langPrefix));
-    }
-    
-    if (!voice) {
-      // Exact match
-      voice = voices.find(v => v.lang === langCode);
-    }
-
-    return voice || null;
-  };
-
-  const handleListen = async () => {
-    if (!window.speechSynthesis) {
-      toast.error(t('notificationsNotSupported') || 'Speech synthesis not supported on this device');
-      return;
-    }
-
-    if (isPlaying) {
-      window.speechSynthesis.cancel();
-      setIsPlaying(false);
-      return;
-    }
-
-    if (!text || text.trim().length === 0) {
-      return;
-    }
-
+  try {
     setIsLoading(true);
+    setIsSpeaking(true);
 
-    try {
-      // Cancel any ongoing speech
-      window.speechSynthesis.cancel();
+    // Normalize text (prevents speed jumps)
+    const cleanText = text
+      .replace(/\n/g, ". ")
+      .replace(/  +/g, " ")
+      .trim();
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      utteranceRef.current = utterance;
+    await TextToSpeech.stop(); // Stop previous speech
 
-      // Set language based on current app language
-      const langCode = getLanguageCode(language);
-      utterance.lang = langCode;
-      
-      // Optimize settings for different language groups
-      // Indian languages need slower speech for clarity
-      if (["hi", "mr", "ta", "te", "kn", "bn", "gu", "or", "ml", "pa"].includes(language)) {
-        utterance.rate = 0.8; // Slower for better clarity in Indian languages
-        utterance.pitch = 1.0;
-      } else {
-        utterance.rate = 0.9;
-        utterance.pitch = 1;
-      }
-      utterance.volume = 1;
+    await TextToSpeech.speak({
+      text: cleanText,
+      lang: getLanguageCode(),
+      rate: 0.6,   // Stable slow speed
+      pitch: 1.0,
+      volume: 1.0,
+    });
 
-      // Find the best voice for this language
-      const bestVoice = findBestVoice(langCode);
-      if (bestVoice) {
-        utterance.voice = bestVoice;
-        console.log(`Using voice: ${bestVoice.name} (${bestVoice.lang})`);
-      } else {
-        console.log(`No specific voice found for ${langCode}, using default`);
-      }
+    setIsSpeaking(false);
+    setIsLoading(false);
 
-      utterance.onstart = () => {
-        setIsPlaying(true);
-        setIsLoading(false);
-      };
+  } catch (error) {
+    console.error("Native TTS error:", error);
+    setIsSpeaking(false);
+    setIsLoading(false);
+  }
+};
 
-      utterance.onend = () => {
-        setIsPlaying(false);
-      };
-
-      utterance.onerror = (event) => {
-        console.error("Speech synthesis error:", event.error);
-        setIsPlaying(false);
-        setIsLoading(false);
-        if (event.error !== 'canceled') {
-          toast.error(t('unexpectedError') || "Could not play audio");
-        }
-      };
-
-      window.speechSynthesis.speak(utterance);
-    } catch (error) {
-      console.error("TTS error:", error);
-      setIsLoading(false);
-      toast.error("Could not play audio");
-    }
+  const stop = async () => {
+    await TextToSpeech.stop();
+    setIsSpeaking(false);
   };
 
   if (compact) {
@@ -199,14 +86,13 @@ const ListenButton = ({ text, className, compact = false }: ListenButtonProps) =
       <Button
         variant="default"
         size="icon"
-        onClick={handleListen}
+        onClick={isSpeaking ? stop : speak}
         disabled={isLoading || !text}
         className={`h-12 w-12 rounded-full shadow-lg ${className}`}
-        aria-label={isPlaying ? t("stopListening") : t("listenToAdvice")}
       >
         {isLoading ? (
           <Loader2 className="h-5 w-5 animate-spin" />
-        ) : isPlaying ? (
+        ) : isSpeaking ? (
           <VolumeX className="h-5 w-5" />
         ) : (
           <Volume2 className="h-5 w-5" />
@@ -219,7 +105,7 @@ const ListenButton = ({ text, className, compact = false }: ListenButtonProps) =
     <Button
       variant="outline"
       size="lg"
-      onClick={handleListen}
+      onClick={isSpeaking ? stop : speak}
       disabled={isLoading || !text}
       className={className}
     >
@@ -228,7 +114,7 @@ const ListenButton = ({ text, className, compact = false }: ListenButtonProps) =
           <Loader2 className="mr-2 h-5 w-5 animate-spin" />
           {t("loading")}
         </>
-      ) : isPlaying ? (
+      ) : isSpeaking ? (
         <>
           <VolumeX className="mr-2 h-5 w-5" />
           {t("stopListening")}

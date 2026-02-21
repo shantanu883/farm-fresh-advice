@@ -16,13 +16,16 @@ import Farms from "./pages/Farms";
 import Auth from "./pages/Auth";
 import Install from "./pages/Install";
 import NotFound from "./pages/NotFound";
+import { PushNotifications } from "@capacitor/push-notifications";
+import { useEffect } from "react";
 
 const queryClient = new QueryClient();
 
-// Auth guard component - redirects to welcome/language screen first
+/* -------------------- ROUTE GUARDS (UNCHANGED) -------------------- */
+
 const AuthGuard = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
-  
+
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -30,20 +33,19 @@ const AuthGuard = ({ children }: { children: React.ReactNode }) => {
       </div>
     );
   }
-  
+
   if (!user) {
     return <Navigate to="/welcome" replace />;
   }
-  
+
   return <>{children}</>;
 };
 
-// Onboarding guard component - checks if profile is complete (waits for profile check)
 const OnboardingGuard = ({ children }: { children: React.ReactNode }) => {
   const { profileChecked } = useAuth();
-  const isOnboardingComplete = localStorage.getItem("onboardingComplete") === "true";
-  
-  // Wait for profile check to complete before deciding
+  const isOnboardingComplete =
+    localStorage.getItem("onboardingComplete") === "true";
+
   if (!profileChecked) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -51,15 +53,14 @@ const OnboardingGuard = ({ children }: { children: React.ReactNode }) => {
       </div>
     );
   }
-  
+
   if (!isOnboardingComplete) {
     return <Navigate to="/onboarding" replace />;
   }
-  
+
   return <>{children}</>;
 };
 
-// Combined guard for authenticated + onboarded users
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return (
     <AuthGuard>
@@ -82,35 +83,114 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/welcome" element={<Welcome />} />
-      <Route path="/auth" element={user ? <Navigate to="/" replace /> : <Auth />} />
-      <Route path="/onboarding" element={<AuthGuard><Onboarding /></AuthGuard>} />
-      <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
-      <Route path="/crop-selection" element={<ProtectedRoute><CropSoilSelection /></ProtectedRoute>} />
-      <Route path="/advisory" element={<ProtectedRoute><Advisory /></ProtectedRoute>} />
-      <Route path="/crop-calendar" element={<ProtectedRoute><CropCalendar /></ProtectedRoute>} />
-      <Route path="/farms" element={<ProtectedRoute><Farms /></ProtectedRoute>} />
-      <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+      <Route
+        path="/auth"
+        element={user ? <Navigate to="/" replace /> : <Auth />}
+      />
+      <Route
+        path="/onboarding"
+        element={
+          <AuthGuard>
+            <Onboarding />
+          </AuthGuard>
+        }
+      />
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Index />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/crop-selection"
+        element={
+          <ProtectedRoute>
+            <CropSoilSelection />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/advisory"
+        element={
+          <ProtectedRoute>
+            <Advisory />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/crop-calendar"
+        element={
+          <ProtectedRoute>
+            <CropCalendar />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/farms"
+        element={
+          <ProtectedRoute>
+            <Farms />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <ProtectedRoute>
+            <Settings />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/install" element={<Install />} />
-      {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
       <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <LanguageProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <AppRoutes />
-          </BrowserRouter>
-        </TooltipProvider>
-      </LanguageProvider>
-    </AuthProvider>
-  </QueryClientProvider>
-);
+/* -------------------- UPDATED APP COMPONENT -------------------- */
+
+function App() {
+
+  useEffect(() => {
+
+    PushNotifications.requestPermissions().then(result => {
+      if (result.receive === "granted") {
+        PushNotifications.register();
+      }
+    });
+
+    PushNotifications.addListener("registration", token => {
+      console.log("FCM Token:", token.value);
+      alert("FCM Token: " + token.value);
+    });
+
+    PushNotifications.addListener("registrationError", err => {
+      console.error("Registration error:", err);
+    });
+
+    PushNotifications.addListener("pushNotificationReceived", notification => {
+      console.log("Notification received:", notification);
+    });
+
+  }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <LanguageProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <AppRoutes />
+            </BrowserRouter>
+          </TooltipProvider>
+        </LanguageProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  );
+}
 
 export default App;
